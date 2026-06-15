@@ -1,4 +1,4 @@
-import type { BookingInput } from "@/lib/validators/booking-schema";
+import type { BookingData as BookingInput } from "@/lib/validators/booking-schema";
 
 export type BookingStatus = "new" | "contacted" | "quoted" | "confirmed" | "declined";
 

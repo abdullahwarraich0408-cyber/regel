@@ -83,4 +83,5 @@ export const bookingSchema = z
     path: ["email"],
   });
 
-export type BookingInput = z.infer<typeof bookingSchema>;
+export type BookingInput = z.input<typeof bookingSchema>;
+export type BookingData = z.output<typeof bookingSchema>;

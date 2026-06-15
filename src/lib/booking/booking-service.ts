@@ -1,4 +1,4 @@
-import { bookingSchema, type BookingInput } from "@/lib/validators/booking-schema";
+import { bookingSchema, type BookingData } from "@/lib/validators/booking-schema";
 import { bookingStorage } from "./booking-storage";
 import type { BookingRecord } from "./booking-types";
 
@@ -18,6 +18,6 @@ export async function submitBooking(raw: unknown): Promise<BookingSubmissionResu
       error: "Please review the highlighted fields and try again.",
     };
   }
-  const record = await bookingStorage.create(parsed.data as BookingInput);
+  const record = await bookingStorage.create(parsed.data as BookingData);
   return { ok: true, record };
 }
