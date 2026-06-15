@@ -130,14 +130,14 @@
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: oklch(0.55 0.08 75);
-}
 
-@utility eyebrow::before {
-  content: "";
-  display: inline-block;
-  width: 28px;
-  height: 1px;
-  background: var(--gold);
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: var(--gold);
+  }
 }
 
 @utility text-balance {
