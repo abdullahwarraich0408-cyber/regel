@@ -1,29 +1,41 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HeroSection } from "@/components/sections/HeroSection";
+import { ServicesSection } from "@/components/sections/ServicesSection";
+import { ProcessSection } from "@/components/sections/ProcessSection";
+import { GalleryPreview } from "@/components/sections/GalleryPreview";
+import { PackagesSection } from "@/components/sections/PackagesSection";
+import { BookingCTA } from "@/components/sections/BookingCTA";
+import { FAQSection } from "@/components/sections/FAQSection";
+import { ContactSection } from "@/components/sections/ContactSection";
+import { siteConfig } from "@/lib/site-config";
+
+const title = `${siteConfig.name} — Premium Event Decor in Manchester`;
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title },
+      { name: "description", content: siteConfig.description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: siteConfig.description },
+      { property: "og:url", content: "/" },
     ],
+    links: [{ rel: "canonical", href: "/" }],
   }),
-  component: Index,
+  component: HomePage,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function HomePage() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <HeroSection />
+      <ServicesSection limit={6} />
+      <ProcessSection />
+      <GalleryPreview />
+      <PackagesSection />
+      <BookingCTA />
+      <FAQSection limit={5} />
+      <ContactSection />
+    </>
   );
 }
