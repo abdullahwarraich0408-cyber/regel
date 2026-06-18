@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { BookingCTA } from "@/components/sections/BookingCTA";
-import { services } from "@/data/services";
-import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/lib/site-config";
 
 const title = "Event Decor Services — Regal Knot Events";
 const description =
@@ -25,53 +25,52 @@ export const Route = createFileRoute("/services")({
 function ServicesPage() {
   return (
     <>
-      <section className="bg-gradient-warm pb-12 pt-24 md:pt-32">
-        <div className="container-prose max-w-3xl">
-          <span className="eyebrow">Services</span>
-          <h1 className="mt-5 font-display text-5xl leading-[1.05] md:text-6xl text-balance">
-            Decor designed around the moment.
-          </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            From signature focal pieces to fully styled venues, every service is led by detail,
-            scale, and a feeling for the room. Choose what you need — we will plan, source, and
-            install it for you.
-          </p>
+      <section className="relative overflow-hidden bg-gradient-hero">
+        {/* Decorative elements */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-40 top-10 h-[32rem] w-[32rem] rounded-full bg-gradient-to-br from-[oklch(0.85_0.07_20_/_0.35)] to-[oklch(0.7_0.08_310_/_0.25)] blur-3xl" />
+          <div className="absolute -right-40 bottom-0 h-[36rem] w-[36rem] rounded-full bg-gradient-to-tl from-[oklch(0.88_0.09_85_/_0.3)] to-[oklch(0.72_0.07_70_/_0.2)] blur-3xl" />
+          <div className="absolute left-1/2 top-1/3 h-64 w-64 -translate-x-1/2 rounded-full bg-[oklch(0.905_0.015_65_/_0.4)] blur-2xl" />
+        </div>
+
+        <div className="container-prose relative py-10 md:py-14 lg:py-16">
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <span className="eyebrow">Services</span>
+              <h1 className="font-display text-5xl leading-[1.02] tracking-tight text-balance md:text-6xl lg:text-7xl">
+                Decor designed
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[oklch(0.78_0.06_20)] to-[oklch(0.32_0.06_300)] italic">
+                  around the moment
+                </span>
+              </h1>
+              <p className="max-w-xl text-lg leading-relaxed text-foreground/80 text-balance">
+                From signature focal pieces to fully styled venues, every service is led by detail,
+                scale, and a feeling for the room. Choose what you need — we will plan, source, and
+                install it for you.
+              </p>
+            </div>
+
+            {/* CTA buttons */}
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              to="/booking"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[oklch(0.32_0.06_300)] to-[oklch(0.78_0.06_20)] text-cream text-base font-semibold hover:brightness-110 shadow-luxury hover:shadow-elegant hover:scale-[1.02] transition-all duration-300 px-7 h-12"
+            >
+              {siteConfig.cta.primary}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/portfolio"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/50 px-7 h-12 text-base font-medium hover:border-[oklch(0.78_0.06_20)] hover:bg-background/70 backdrop-blur-sm transition-all duration-300"
+            >
+              View Portfolio
+            </Link>
+          </div>
+          </div>
         </div>
       </section>
 
       <ServicesSection />
-
-      <section className="pb-24 md:pb-32">
-        <div className="container-prose">
-          <div className="grid gap-8 lg:grid-cols-2">
-            {services.map((s) => {
-              const Icon = s.icon;
-              return (
-                <article
-                  key={s.slug}
-                  className="rounded-3xl border border-border bg-card p-8 shadow-soft"
-                >
-                  <div className="flex items-center gap-4">
-                    <span className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-gold text-charcoal shadow-gold">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <h2 className="font-display text-3xl">{s.title}</h2>
-                  </div>
-                  <p className="mt-5 text-base leading-relaxed text-foreground/85">{s.long}</p>
-                  <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-                    <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                      Best for · {s.bestFor}
-                    </span>
-                    <Button asChild size="sm" variant="outline" className="rounded-full">
-                      <Link to="/booking">Plan with us</Link>
-                    </Button>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
       <BookingCTA />
     </>

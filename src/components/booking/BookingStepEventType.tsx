@@ -24,7 +24,7 @@ export function BookingStepEventType() {
         title="What are we styling?"
         subtitle="Choose the type of event you would like styled."
       />
-      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {eventTypes.map((type) => {
           const Icon = icons[type];
           const active = selected === type;
@@ -33,24 +33,30 @@ export function BookingStepEventType() {
               key={type}
               type="button"
               onClick={() => setValue("eventType", type, { shouldValidate: true })}
-              className={`group flex items-start gap-3 rounded-2xl border p-5 text-left transition-all ${
+              className={`group flex items-center gap-4 rounded-2xl border p-5 text-left transition-all duration-300 backdrop-blur-sm gold-glow ${
                 active
-                  ? "border-accent bg-accent/10 shadow-soft"
-                  : "border-border bg-background hover:border-accent/50 hover:shadow-soft"
+                  ? "border-[oklch(0.78_0.06_20)] bg-gradient-to-br from-deep-plum to-midnight text-cream shadow-luxury scale-[1.02]"
+                  : "border-border/60 bg-background/40 hover:border-accent hover:bg-background/80 hover:shadow-soft"
               }`}
               aria-pressed={active}
             >
-              <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${active ? "bg-gradient-gold text-charcoal" : "bg-muted text-foreground/70"}`}>
-                <Icon className="h-4 w-4" />
+              <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl transition-all duration-500 group-hover:scale-110 ${
+                active ? "bg-gradient-gold text-midnight shadow-soft" : "bg-secondary/50 text-foreground/70"
+              }`}>
+                <Icon className="h-5 w-5" />
               </span>
-              <span>
-                <span className="block font-display text-lg leading-tight">{type}</span>
-              </span>
+              <div>
+                <span className={`block font-display text-xl leading-tight font-medium transition-colors ${
+                  active ? "text-cream" : "group-hover:text-[oklch(0.78_0.06_20)]"
+                }`}>
+                  {type}
+                </span>
+              </div>
             </button>
           );
         })}
       </div>
-      {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
+      {error && <p className="mt-4 text-sm text-destructive font-medium animate-shake">{error}</p>}
     </div>
   );
 }
@@ -58,7 +64,7 @@ export function BookingStepEventType() {
 export function StepHeader({ step, title, subtitle }: { step: string; title: string; subtitle: string }) {
   return (
     <div>
-      <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-accent">Step {step}</div>
+      <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-accent">Step {step}</div>
       <h2 className="mt-2 font-display text-3xl leading-tight md:text-4xl">{title}</h2>
       <p className="mt-2 text-sm text-muted-foreground">{subtitle}</p>
     </div>

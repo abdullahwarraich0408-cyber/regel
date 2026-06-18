@@ -17,12 +17,18 @@ export function BookingSuccess() {
           quote details. You can expect a personal reply within two working days.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <Button asChild size="lg" className="rounded-full">
-            <Link to="/">Back to home</Link>
-          </Button>
-          <Button asChild size="lg" variant="outline" className="rounded-full">
-            <Link to="/services">View services</Link>
-          </Button>
+          <Link
+            to="/"
+            className="h-10 rounded-full px-8 bg-gradient-to-r from-[oklch(0.32_0.06_300)] to-[oklch(0.78_0.06_20)] text-cream text-sm font-semibold hover:brightness-110 shadow-soft transition-all duration-300 inline-flex items-center justify-center gap-2 whitespace-nowrap"
+          >
+            Back to home
+          </Link>
+          <Link
+            to="/services"
+            className="h-10 rounded-full px-8 border border-border bg-background text-sm font-medium hover:border-[oklch(0.78_0.06_20)] hover:bg-background/70 backdrop-blur-sm transition-all duration-300 inline-flex items-center justify-center gap-2 whitespace-nowrap"
+          >
+            View services
+          </Link>
         </div>
       </div>
     </section>

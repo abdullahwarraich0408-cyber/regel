@@ -23,7 +23,7 @@ export function BookingStepStyle() {
 
       <div className="mt-8 grid gap-5">
         <Field label="Preferred theme or colour palette" error={errors.theme?.message}>
-          <Input placeholder="e.g. Champagne, ivory and gold — soft and romantic" {...register("theme")} />
+          <Input placeholder="e.g. Champagne, ivory and gold — soft and romantic" className="rounded-xl border-border/60 bg-background/50 focus-visible:ring-[oklch(0.8_0.08_85)] h-11 px-4" {...register("theme")} />
         </Field>
 
         <Field label="Decor services needed" error={errors.servicesNeeded?.message as string | undefined}>
@@ -35,8 +35,10 @@ export function BookingStepStyle() {
                   key={s}
                   type="button"
                   onClick={() => toggle(s)}
-                  className={`rounded-full border px-4 py-2 text-sm transition-colors ${
-                    active ? "border-accent bg-accent/15" : "border-border bg-background hover:border-accent/50"
+                  className={`rounded-full border px-4.5 py-2 text-xs font-semibold uppercase tracking-wider transition-all duration-300 gold-glow ${
+                    active
+                      ? "border-transparent bg-gradient-to-br from-deep-plum to-midnight text-cream shadow-luxury scale-[1.02]"
+                      : "border-border/60 bg-background/50 text-foreground/75 hover:border-accent hover:bg-background/80"
                   }`}
                   aria-pressed={active}
                 >
@@ -56,8 +58,10 @@ export function BookingStepStyle() {
                   key={b}
                   type="button"
                   onClick={() => setValue("budgetRange", b, { shouldValidate: true })}
-                  className={`rounded-full border px-4 py-2 text-sm transition-colors ${
-                    active ? "border-accent bg-accent/15" : "border-border bg-background hover:border-accent/50"
+                  className={`rounded-full border px-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-300 gold-glow ${
+                    active
+                      ? "border-transparent bg-gradient-to-br from-deep-plum to-midnight text-cream shadow-luxury scale-[1.02]"
+                      : "border-border/60 bg-background/50 text-foreground/75 hover:border-accent hover:bg-background/80"
                   }`}
                   aria-pressed={active}
                 >
@@ -72,6 +76,7 @@ export function BookingStepStyle() {
           <Textarea
             rows={4}
             placeholder="Anything you've seen and loved, references, must-haves, or details to avoid."
+            className="rounded-2xl border-border/60 bg-background/50 focus-visible:ring-[oklch(0.8_0.08_85)] p-4"
             {...register("inspirationNotes")}
           />
         </Field>
