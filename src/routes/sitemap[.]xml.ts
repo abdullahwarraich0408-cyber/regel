@@ -7,7 +7,7 @@ interface SitemapEntry {
   priority?: string;
 }
 
-const BASE_URL = "";
+const BASE_URL = import.meta.env.VITE_SITE_URL ?? "";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -15,6 +15,9 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
+          { path: "/wedding-planning", changefreq: "monthly", priority: "0.95" },
+          { path: "/event-management", changefreq: "monthly", priority: "0.95" },
+          { path: "/corporate-events", changefreq: "monthly", priority: "0.95" },
           { path: "/services", changefreq: "monthly", priority: "0.9" },
           { path: "/portfolio", changefreq: "monthly", priority: "0.8" },
           { path: "/booking", changefreq: "monthly", priority: "0.9" },

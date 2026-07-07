@@ -9,15 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WeddingPlanningRouteImport } from './routes/wedding-planning'
 import { Route as ThankYouRouteImport } from './routes/thank-you'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
+import { Route as EventManagementRouteImport } from './routes/event-management'
+import { Route as CorporateEventsRouteImport } from './routes/corporate-events'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PortfolioIdRouteImport } from './routes/portfolio/$id'
 import { Route as ApiBookingsRouteImport } from './routes/api/bookings'
 
+const WeddingPlanningRoute = WeddingPlanningRouteImport.update({
+  id: '/wedding-planning',
+  path: '/wedding-planning',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ThankYouRoute = ThankYouRouteImport.update({
   id: '/thank-you',
   path: '/thank-you',
@@ -38,6 +47,16 @@ const PortfolioRoute = PortfolioRouteImport.update({
   path: '/portfolio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventManagementRoute = EventManagementRouteImport.update({
+  id: '/event-management',
+  path: '/event-management',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CorporateEventsRoute = CorporateEventsRouteImport.update({
+  id: '/corporate-events',
+  path: '/corporate-events',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -53,6 +72,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortfolioIdRoute = PortfolioIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => PortfolioRoute,
+} as any)
 const ApiBookingsRoute = ApiBookingsRouteImport.update({
   id: '/api/bookings',
   path: '/api/bookings',
@@ -63,32 +87,44 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
-  '/portfolio': typeof PortfolioRoute
+  '/corporate-events': typeof CorporateEventsRoute
+  '/event-management': typeof EventManagementRoute
+  '/portfolio': typeof PortfolioRouteWithChildren
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thank-you': typeof ThankYouRoute
+  '/wedding-planning': typeof WeddingPlanningRoute
   '/api/bookings': typeof ApiBookingsRoute
+  '/portfolio/$id': typeof PortfolioIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
-  '/portfolio': typeof PortfolioRoute
+  '/corporate-events': typeof CorporateEventsRoute
+  '/event-management': typeof EventManagementRoute
+  '/portfolio': typeof PortfolioRouteWithChildren
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thank-you': typeof ThankYouRoute
+  '/wedding-planning': typeof WeddingPlanningRoute
   '/api/bookings': typeof ApiBookingsRoute
+  '/portfolio/$id': typeof PortfolioIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
-  '/portfolio': typeof PortfolioRoute
+  '/corporate-events': typeof CorporateEventsRoute
+  '/event-management': typeof EventManagementRoute
+  '/portfolio': typeof PortfolioRouteWithChildren
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thank-you': typeof ThankYouRoute
+  '/wedding-planning': typeof WeddingPlanningRoute
   '/api/bookings': typeof ApiBookingsRoute
+  '/portfolio/$id': typeof PortfolioIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -96,46 +132,68 @@ export interface FileRouteTypes {
     | '/'
     | '/booking'
     | '/contact'
+    | '/corporate-events'
+    | '/event-management'
     | '/portfolio'
     | '/services'
     | '/sitemap.xml'
     | '/thank-you'
+    | '/wedding-planning'
     | '/api/bookings'
+    | '/portfolio/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/booking'
     | '/contact'
+    | '/corporate-events'
+    | '/event-management'
     | '/portfolio'
     | '/services'
     | '/sitemap.xml'
     | '/thank-you'
+    | '/wedding-planning'
     | '/api/bookings'
+    | '/portfolio/$id'
   id:
     | '__root__'
     | '/'
     | '/booking'
     | '/contact'
+    | '/corporate-events'
+    | '/event-management'
     | '/portfolio'
     | '/services'
     | '/sitemap.xml'
     | '/thank-you'
+    | '/wedding-planning'
     | '/api/bookings'
+    | '/portfolio/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BookingRoute: typeof BookingRoute
   ContactRoute: typeof ContactRoute
-  PortfolioRoute: typeof PortfolioRoute
+  CorporateEventsRoute: typeof CorporateEventsRoute
+  EventManagementRoute: typeof EventManagementRoute
+  PortfolioRoute: typeof PortfolioRouteWithChildren
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ThankYouRoute: typeof ThankYouRoute
+  WeddingPlanningRoute: typeof WeddingPlanningRoute
   ApiBookingsRoute: typeof ApiBookingsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wedding-planning': {
+      id: '/wedding-planning'
+      path: '/wedding-planning'
+      fullPath: '/wedding-planning'
+      preLoaderRoute: typeof WeddingPlanningRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/thank-you': {
       id: '/thank-you'
       path: '/thank-you'
@@ -164,6 +222,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortfolioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/event-management': {
+      id: '/event-management'
+      path: '/event-management'
+      fullPath: '/event-management'
+      preLoaderRoute: typeof EventManagementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/corporate-events': {
+      id: '/corporate-events'
+      path: '/corporate-events'
+      fullPath: '/corporate-events'
+      preLoaderRoute: typeof CorporateEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -185,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portfolio/$id': {
+      id: '/portfolio/$id'
+      path: '/$id'
+      fullPath: '/portfolio/$id'
+      preLoaderRoute: typeof PortfolioIdRouteImport
+      parentRoute: typeof PortfolioRoute
+    }
     '/api/bookings': {
       id: '/api/bookings'
       path: '/api/bookings'
@@ -195,14 +274,29 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface PortfolioRouteChildren {
+  PortfolioIdRoute: typeof PortfolioIdRoute
+}
+
+const PortfolioRouteChildren: PortfolioRouteChildren = {
+  PortfolioIdRoute: PortfolioIdRoute,
+}
+
+const PortfolioRouteWithChildren = PortfolioRoute._addFileChildren(
+  PortfolioRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BookingRoute: BookingRoute,
   ContactRoute: ContactRoute,
-  PortfolioRoute: PortfolioRoute,
+  CorporateEventsRoute: CorporateEventsRoute,
+  EventManagementRoute: EventManagementRoute,
+  PortfolioRoute: PortfolioRouteWithChildren,
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ThankYouRoute: ThankYouRoute,
+  WeddingPlanningRoute: WeddingPlanningRoute,
   ApiBookingsRoute: ApiBookingsRoute,
 }
 export const routeTree = rootRouteImport

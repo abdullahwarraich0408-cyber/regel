@@ -1,0 +1,89 @@
+//#region node_modules/.nitro/vite/services/ssr/assets/site-config-CzPcgAYQ.js
+var siteConfig = {
+	name: "Regal Knot Events",
+	tagline: "Elegant event decor for unforgettable celebrations",
+	description: "Premium wedding and event coordination across Manchester — bespoke styling, seamless setup, and unforgettable celebrations.",
+	location: "Manchester, United Kingdom",
+	serviceArea: "Greater Manchester & the North West",
+	email: "hello@regalknotevents.co.uk",
+	phone: "+44 0000 000000",
+	whatsapp: "+44 0000 000000",
+	social: {
+		instagram: "https://www.instagram.com/regal.knot.events",
+		facebook: "https://facebook.com/regalknotevents",
+		tiktok: ""
+	},
+	instagram: { username: "regal.knot.events" },
+	googleReviews: {
+		url: "https://g.page/regalknotevents/review",
+		rating: 5,
+		count: 48,
+		placeName: "Regal Knot Events"
+	},
+	cta: {
+		primary: "Check Availability",
+		secondary: "Book Consultation",
+		whatsapp: "Chat on WhatsApp"
+	},
+	trustBadges: [
+		"Weddings",
+		"Private Events",
+		"Corporate Events"
+	],
+	stats: [
+		{
+			value: "150+",
+			label: "Events Delivered",
+			detail: "Weddings, celebrations & corporate events"
+		},
+		{
+			value: "8+",
+			label: "Years Experience",
+			detail: "Trusted across Greater Manchester"
+		},
+		{
+			value: "100%",
+			label: "Client Satisfaction",
+			detail: "Calm, flawless delivery every time"
+		},
+		{
+			value: "50+",
+			label: "Partner Vendors",
+			detail: "Florists, venues & premium suppliers"
+		}
+	],
+	heroHighlights: [
+		"Premium wedding & event coordination",
+		"Manchester & North West coverage",
+		"Setup, styling & pack-down included"
+	],
+	premiumServices: [
+		{
+			slug: "wedding-planning",
+			title: "Weddings",
+			description: "Romantic receptions, ceremony styling, and bespoke wedding decor tailored to your love story.",
+			icon: "heart",
+			palette: ["oklch(0.95 0.03 85)", "oklch(0.78 0.06 20)"]
+		},
+		{
+			slug: "event-management",
+			title: "Private Events & Birthdays",
+			description: "Milestone birthdays, baby showers, and intimate celebrations styled with luxury and personality.",
+			icon: "cake",
+			palette: ["oklch(0.32 0.06 300)", "oklch(0.8 0.08 85)"]
+		},
+		{
+			slug: "corporate-events",
+			title: "Corporate Events",
+			description: "Brand launches, awards evenings, and corporate gatherings with polished, professional styling.",
+			icon: "briefcase",
+			palette: ["oklch(0.20 0.01 260)", "oklch(0.55 0.06 150)"]
+		}
+	],
+	analytics: { gtagId: "" }
+};
+function whatsappUrl(message) {
+	return `https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}${message ? `&text=${encodeURIComponent(message)}` : `&text=${encodeURIComponent("Hi Regal Knot Events, I'd like to enquire about an event.")}`}`;
+}
+//#endregion
+export { whatsappUrl as n, siteConfig as t };

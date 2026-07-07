@@ -1,23 +1,29 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { ServicesSection } from "@/components/sections/ServicesSection";
-import { ProcessSection } from "@/components/sections/ProcessSection";
-import { GalleryPreview } from "@/components/sections/GalleryPreview";
-import { PackagesSection } from "@/components/sections/PackagesSection";
-import { BookingCTA } from "@/components/sections/BookingCTA";
-import { FAQSection } from "@/components/sections/FAQSection";
-import { ContactSection } from "@/components/sections/ContactSection";
+import { InstagramSection } from "@/components/sections/InstagramSection";
+import { PremiumServicesOverview } from "@/components/sections/PremiumServicesOverview";
+import { PortfolioSection } from "@/components/sections/PortfolioSection";
+import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
+import { TrustSection } from "@/components/sections/TrustSection";
+import { FinalConversionCTA } from "@/components/sections/FinalConversionCTA";
 import { siteConfig } from "@/lib/site-config";
 
-const title = `${siteConfig.name} — Premium Event Decor in Manchester`;
+const title = `${siteConfig.name} — Premium Wedding & Event Styling in Manchester`;
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title },
-      { name: "description", content: siteConfig.description },
+      {
+        name: "description",
+        content:
+          "Premium wedding and event coordination in Manchester. Check availability, view real event portfolio, and enquire via WhatsApp.",
+      },
       { property: "og:title", content: title },
-      { property: "og:description", content: siteConfig.description },
+      {
+        property: "og:description",
+        content: siteConfig.description,
+      },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
@@ -29,13 +35,12 @@ function HomePage() {
   return (
     <>
       <HeroSection />
-      <ServicesSection limit={6} />
-      <ProcessSection />
-      <GalleryPreview />
-      <PackagesSection />
-      <BookingCTA />
-      <FAQSection limit={5} />
-      <ContactSection />
+      <InstagramSection />
+      <PremiumServicesOverview />
+      <PortfolioSection />
+      <TestimonialsSection />
+      <TrustSection />
+      <FinalConversionCTA />
     </>
   );
 }

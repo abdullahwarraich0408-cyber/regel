@@ -1,5 +1,5 @@
 import { Mail, Phone, MapPin, Instagram, Facebook, ArrowRight } from "lucide-react";
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig, whatsappUrl } from "@/lib/site-config";
 
 export function ContactSection() {
   const items = [
@@ -13,7 +13,8 @@ export function ContactSection() {
       icon: Phone,
       label: "Phone / WhatsApp",
       value: siteConfig.phone,
-      href: `tel:${siteConfig.phone.replace(/\s+/g, "")}`,
+      href: whatsappUrl(),
+      external: true,
     },
     {
       icon: MapPin,
@@ -82,7 +83,13 @@ export function ContactSection() {
               </div>
             );
             return it.href ? (
-              <a key={it.label} href={it.href} className="block">
+              <a
+                key={it.label}
+                href={it.href}
+                target={"external" in it && it.external ? "_blank" : undefined}
+                rel={"external" in it && it.external ? "noreferrer" : undefined}
+                className="block"
+              >
                 {content}
               </a>
             ) : (

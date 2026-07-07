@@ -1,175 +1,238 @@
-import { useState, useEffect } from "react";
+"use client";
+
+import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, Star, Calendar, Heart } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
+import { trackConversion } from "@/lib/analytics";
+import { buildHeroFanImages, heroFallbackImages } from "@/lib/hero-fan-images";
+import { resolvePortfolioMediaUrl } from "@/lib/portfolio-api";
+import { useInstagramFeed } from "@/hooks/useInstagramFeed";
+import { usePortfolioItems } from "@/hooks/usePortfolioItems";
 
-const previews = [
-  {
-    category: "Weddings",
-    title: "Champagne & Ivory Romance",
-    tagline: "Romantic draping, luxury candlelight, and bespoke floral runners.",
-    gradient: "linear-gradient(135deg, oklch(0.975 0.005 90) 0%, oklch(0.78 0.06 20) 35%, oklch(0.32 0.06 300) 100%)",
-    badge: "Brides & Couples",
-  },
-  {
-    category: "Birthdays",
-    title: "Gilded Milestone Setup",
-    tagline: "Sleek midnight panels, chrome accents, and cascading warm lights.",
-    gradient: "linear-gradient(135deg, oklch(0.20 0.01 260) 0%, oklch(0.32 0.06 300) 45%, oklch(0.8 0.08 85) 100%)",
-    badge: "Milestones",
-  },
-  {
-    category: "Baby Showers",
-    title: "Blush & Sage Botanical",
-    tagline: "Soft organic sage frames, luxury clouds, and custom signage.",
-    gradient: "linear-gradient(135deg, oklch(0.975 0.005 90) 0%, oklch(0.55 0.06 150) 40%, oklch(0.78 0.06 20) 100%)",
-    badge: "Mothers-to-be",
-  },
-  {
-    category: "Bespoke Themes",
-    title: "Architectural Installations",
-    tagline: "Sculptural backdrops and balloon styling tailored to your theme.",
-    gradient: "linear-gradient(135deg, oklch(0.905 0.015 65) 0%, oklch(0.32 0.06 300) 50%, oklch(0.20 0.01 260) 100%)",
-    badge: "Bespoke Concepts",
-  }
-];
+const sizeClasses = {
+  "fan-outer":
+    "h-[clamp(120px,22vh,280px)] w-[clamp(62px,11vw,145px)] sm:h-[clamp(148px,24vh,320px)] sm:w-[clamp(76px,12vw,165px)]",
+  "fan-inner":
+    "h-[clamp(132px,24vh,300px)] w-[clamp(68px,12vw,158px)] sm:h-[clamp(160px,26vh,360px)] sm:w-[clamp(82px,13vw,188px)]",
+  "fan-center":
+    "h-[clamp(148px,30vh,340px)] w-[clamp(76px,13vw,178px)] sm:h-[clamp(184px,32vh,400px)] sm:w-[clamp(94px,14.5vw,208px)] lg:h-[clamp(220px,36vh,480px)] lg:w-[clamp(112px,16vw,248px)]",
+};
 
-export function HeroSection() {
-  const [activeIndex, setActiveIndex] = useState(0);
+function HeroScribbleLeft({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="56"
+      height="50"
+      viewBox="0 0 80 72"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M72 8C58 18 42 22 28 18C16 14 8 24 12 36C16 48 30 52 44 46"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M44 46L36 58M44 46L52 54"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 
-  // Auto-rotate every 7 seconds unless interacted with
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % previews.length);
-    }, 7000);
-    return () => clearInterval(timer);
-  }, []);
+function HeroScribbleRight({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="60"
+      height="44"
+      viewBox="0 0 88 64"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M12 42C24 28 42 18 62 22C78 26 84 38 76 48C66 60 44 58 28 50"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M58 18C62 10 70 8 78 12"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 
-  const activePreview = previews[activeIndex];
+function HeroFanCard({
+  image,
+  index,
+}: {
+  image: ReturnType<typeof buildHeroFanImages>[number];
+  index: number;
+}) {
+  const [src, setSrc] = useState(image.imageUrl);
+  const [failed, setFailed] = useState(false);
+  const isCenter = Boolean(image.featured);
+  const hiddenOnMobile = index === 0 || index === 4;
+
+  const handleError = () => {
+    if (src !== image.fallbackUrl) {
+      setSrc(image.fallbackUrl);
+      return;
+    }
+
+    const backup = heroFallbackImages[index];
+    if (src !== backup) {
+      setSrc(backup);
+      return;
+    }
+
+    setFailed(true);
+  };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-hero lg:min-h-[calc(100vh-5rem)] lg:flex lg:items-center">
-      {/* Decorative floating blurred spots */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-40 top-10 h-[32rem] w-[32rem] rounded-full bg-gradient-to-br from-[oklch(0.85_0.07_20_/_0.35)] to-[oklch(0.7_0.08_310_/_0.25)] blur-3xl transition-all duration-1000" />
-        <div className="absolute -right-40 bottom-0 h-[36rem] w-[36rem] rounded-full bg-gradient-to-tl from-[oklch(0.88_0.09_85_/_0.3)] to-[oklch(0.72_0.07_70_/_0.2)] blur-3xl transition-all duration-1000" />
-      </div>
+    <div
+      className={`relative shrink-0 transition-transform duration-500 hover:-translate-y-0.5 ${image.rotate} ${
+        sizeClasses[image.size]
+      } ${hiddenOnMobile ? "hidden sm:block" : ""}`}
+    >
+      <div
+        className={`relative h-full w-full overflow-hidden rounded-xl border border-border/40 shadow-elegant sm:rounded-2xl lg:rounded-[1.35rem] ${
+          isCenter
+            ? "ring-2 ring-soft-gold/40 ring-offset-1 ring-offset-[oklch(0.97_0.018_95)] sm:ring-offset-2"
+            : ""
+        }`}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(160deg, ${image.palette[0]} 0%, ${image.palette[1]} 100%)`,
+          }}
+        />
 
-      <div className="container-prose relative grid gap-6 py-6 md:py-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center w-full">
-        {/* Left content */}
-        <div className="space-y-4 text-center lg:text-left flex flex-col items-center lg:items-start">
-          <div className="space-y-3 flex flex-col items-center lg:items-start">
-            <span className="eyebrow">Manchester Event Decor Studio</span>
-            <h1 className="font-display text-4xl leading-[1.05] tracking-tight text-balance md:text-5xl lg:text-6xl">
-              Transform your celebration
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[oklch(0.78_0.06_20)] to-[oklch(0.32_0.06_300)] italic">
-                into a luxurious experience
-              </span>
-            </h1>
-            <p className="max-w-xl text-base leading-relaxed text-foreground/80 text-balance mx-auto lg:mx-0">
-              {siteConfig.description}
-            </p>
-          </div>
+        {!failed ? (
+          <img
+            src={src}
+            alt={image.title}
+            className="absolute inset-0 h-full w-full object-cover"
+            loading={isCenter ? "eager" : "lazy"}
+            decoding="async"
+            onError={handleError}
+          />
+        ) : null}
 
-          {/* Interactive tabs switcher */}
-          <div className="hidden lg:block space-y-2">
-            <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-              Select an event type to preview
-            </div>
-            <div className="flex flex-wrap gap-1.5 justify-center lg:justify-start">
-              {previews.map((preview, idx) => {
-                const active = idx === activeIndex;
-                return (
-                  <button
-                    key={preview.category}
-                    type="button"
-                    onClick={() => setActiveIndex(idx)}
-                    className={`rounded-full border px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition-all duration-300 cursor-pointer ${active
-                        ? "border-transparent bg-gradient-to-br from-deep-plum to-midnight text-cream shadow-luxury scale-[1.02]"
-                        : "border-border/60 bg-background/50 text-foreground/75 hover:border-accent hover:bg-background/80"
-                      }`}
-                  >
-                    {preview.category}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-midnight/55 via-midnight/10 to-transparent" />
 
-          {/* CTA buttons */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1">
+        {isCenter ? (
+          <div className="absolute inset-x-0 bottom-0 p-2 sm:p-2.5 lg:p-3">
             <Link
               to="/booking"
-              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-deep-plum to-dusty-rose text-cream text-sm font-semibold hover:brightness-110 shadow-luxury hover:scale-[1.02] transition-all duration-300 px-6 h-11"
+              onClick={() => trackConversion("consultation_click")}
+              className="inline-flex h-8 w-full items-center justify-center rounded-full border border-midnight/15 bg-cream/95 px-3 text-[11px] font-semibold text-midnight shadow-soft transition-all hover:bg-cream sm:h-9 sm:text-xs lg:h-10 lg:text-sm"
             >
-              {siteConfig.cta.primary}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/services"
-              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/50 px-6 h-11 text-sm font-medium hover:border-deep-plum hover:bg-background/70 backdrop-blur-sm transition-all duration-300"
-            >
-              Explore Services
+              Get started
             </Link>
           </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
 
-          {/* Trust badges */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-2">
-            {siteConfig.trustBadges.map((badge, index) => (
+export function HeroSection() {
+  const { data: instagramData } = useInstagramFeed();
+  const { data: portfolioItems = [] } = usePortfolioItems();
+
+  const fanImages = useMemo(() => {
+    const portfolioUrls = portfolioItems.flatMap((item) => {
+      const urls: string[] = [];
+      if (item.imageUrl) urls.push(resolvePortfolioMediaUrl(item.imageUrl));
+      if (item.gallery?.length) {
+        urls.push(...item.gallery.map(resolvePortfolioMediaUrl));
+      }
+      return urls;
+    });
+
+    const instagramUrls = (instagramData?.posts ?? []).map((post) => post.imageUrl);
+
+    return buildHeroFanImages(instagramUrls, portfolioUrls);
+  }, [portfolioItems, instagramData?.posts]);
+
+  return (
+    <section className="relative flex min-h-[calc(100svh-5rem)] flex-col overflow-hidden bg-[oklch(0.97_0.018_95)]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,oklch(1_0_0_/_0.65),transparent_58%)]" />
+
+      <div className="container-prose relative z-10 flex min-h-[calc(100svh-5rem)] flex-col items-center justify-between px-4 pb-4 pt-8 text-center sm:pb-5 sm:pt-10 md:pt-12 lg:pb-6 lg:pt-14">
+        <div className="flex shrink-0 flex-col items-center">
+          <Link
+            to="/booking"
+            onClick={() => trackConversion("availability_click")}
+            className="hero-fade-in inline-flex items-center gap-1.5 rounded-full bg-midnight px-4 py-2 text-xs font-semibold text-cream shadow-soft transition-transform hover:scale-[1.03] sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+            style={{ animationDelay: "0.05s" }}
+          >
+            Plan your celebration
+            <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          </Link>
+
+          <div
+            className="hero-fade-in relative mx-auto mt-3 max-w-4xl sm:mt-4 lg:mt-5"
+            style={{ animationDelay: "0.12s" }}
+          >
+            <HeroScribbleLeft className="absolute -left-6 top-0 hidden text-deep-plum/70 lg:-left-12 lg:block" />
+            <HeroScribbleRight className="absolute -right-6 top-4 hidden text-deep-plum/70 lg:-right-10 lg:block" />
+
+            <h1 className="mx-auto max-w-[16ch] font-sans text-[1.45rem] font-bold leading-[1.1] tracking-tight text-midnight sm:max-w-3xl sm:text-3xl md:text-4xl lg:max-w-4xl lg:text-[2.65rem] lg:leading-[1.08]">
+              Connect with professional event styling for your{" "}
+              <span className="relative inline-block">
+                dream celebration
+                <span className="absolute -bottom-0.5 left-0 right-0 hidden h-2 border-b-2 border-dusty-rose/45 rounded-full lg:block" />
+              </span>
+            </h1>
+          </div>
+
+          <p
+            className="hero-fade-in mx-auto mt-2 max-w-xl text-xs leading-snug text-muted-foreground sm:mt-3 sm:max-w-2xl sm:text-sm lg:text-base"
+            style={{ animationDelay: "0.2s" }}
+          >
+            Find, plan, and book bespoke wedding and event styling across Manchester —
+            tailored to your vision, venue, and budget.
+          </p>
+        </div>
+
+        <div
+          className="hero-fade-in flex w-full min-h-0 flex-1 flex-col items-center justify-end pt-3 sm:pt-4"
+          style={{ animationDelay: "0.28s" }}
+        >
+          <div className="mx-auto flex max-w-5xl items-end justify-center gap-1 sm:gap-1.5 md:gap-2 lg:gap-3">
+            {fanImages.map((image, index) => (
+              <HeroFanCard
+                key={`${image.title}-${image.imageUrl}`}
+                image={image}
+                index={index}
+              />
+            ))}
+          </div>
+
+          <div
+            className="hero-fade-in mt-3 flex shrink-0 flex-wrap items-center justify-center gap-1.5 pb-1 sm:mt-4 sm:gap-2"
+            style={{ animationDelay: "0.36s" }}
+          >
+            {siteConfig.trustBadges.map((badge) => (
               <span
                 key={badge}
-                className="flex items-center gap-2 rounded-full border border-border/50 bg-background/60 px-4 py-2 text-[11px] font-medium text-foreground/85 backdrop-blur-sm shadow-soft"
+                className="rounded-full border border-border/50 bg-background/80 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-foreground/65 sm:px-3 sm:text-[10px]"
               >
-                {index === 0 && <Star className="h-3 w-3 text-[oklch(0.8_0.08_85)]" />}
-                {index === 1 && <Calendar className="h-3 w-3 text-[oklch(0.8_0.08_85)]" />}
-                {index === 2 && <Heart className="h-3 w-3 text-[oklch(0.8_0.08_85)]" />}
                 {badge}
               </span>
             ))}
-          </div>
-        </div>
-
-        {/* Right content - Dynamic Preview Card */}
-        <div className="hidden lg:block relative max-w-[380px] lg:max-w-none mx-auto w-full">
-          <div className="relative aspect-[4/5] max-h-[440px] lg:max-h-[480px] w-full overflow-hidden rounded-[2rem] shadow-elegant border border-border/20 transition-all duration-1000">
-            {/* Background gradient layout with smooth transition overlay */}
-            <div
-              className="absolute inset-0 transition-all duration-1000 ease-in-out"
-              style={{ background: activePreview.gradient }}
-            />
-            {/* Luxury soft flare light */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_20%,rgba(255,255,255,0.4),transparent_70%)]" />
-
-            {/* Visual shine element */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,rgba(255,255,255,0.15)_50%,transparent_100%)] translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-1000 pointer-events-none" />
-
-            <div className="absolute inset-0 flex flex-col justify-end p-6 text-cream">
-              {/* Active Badge */}
-              <div className="flex items-center gap-2">
-                <span className="glass-card inline-flex w-fit items-center gap-1.5 rounded-full px-3.5 py-1 text-[9px] uppercase tracking-[0.2em] text-cream bg-cream/25 border-cream/20">
-                  <Sparkles className="h-3 w-3 text-[oklch(0.8_0.08_85)]" /> {activePreview.badge}
-                </span>
-              </div>
-
-              {/* Dynamic Title and Details */}
-              <h3 className="mt-3 font-display text-2xl leading-tight drop-shadow-lg transition-all duration-700">
-                {activePreview.title}
-              </h3>
-              <p className="mt-1.5 text-xs text-cream/95 drop-shadow-md font-sans font-medium max-w-sm transition-all duration-700">
-                {activePreview.tagline}
-              </p>
-            </div>
-          </div>
-
-          {/* Floating card */}
-          <div className="absolute -bottom-4 -right-4 hidden w-44 rounded-xl border border-soft-gold bg-gradient-to-br from-deep-plum to-midnight text-cream p-3.5 shadow-[0_10px_35px_oklch(0.8_0.08_85_/_0.25)] backdrop-blur-md md:block animate-float">
-            <div className="text-[8px] uppercase tracking-[0.24em] text-cream/75 font-semibold">
-              Now Booking
-            </div>
-            <div className="mt-0.5 font-display text-lg text-cream font-medium">2026 Events</div>
-            <Link to="/booking" className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-soft-gold hover:text-cream transition-colors duration-200">
-              Reserve Your Date <ArrowRight className="h-3 w-3" />
-            </Link>
           </div>
         </div>
       </div>

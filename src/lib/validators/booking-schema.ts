@@ -1,14 +1,5 @@
 import { z } from "zod";
 
-export const eventTypes = [
-  "Wedding",
-  "Birthday",
-  "Baby Shower",
-  "Party",
-  "Corporate or Private Event",
-  "Custom Theme",
-] as const;
-
 export const venueTypes = ["Indoor", "Outdoor", "Both"] as const;
 export const contactMethods = ["Email", "Phone", "WhatsApp"] as const;
 export const decorServices = [
@@ -31,7 +22,11 @@ export const budgetRanges = [
 
 export const bookingSchema = z
   .object({
-    eventType: z.enum(eventTypes, { message: "Please select an event type" }),
+    eventType: z
+      .string()
+      .trim()
+      .min(1, { message: "Please select an event type" })
+      .max(80),
 
     preferredDate: z
       .string()

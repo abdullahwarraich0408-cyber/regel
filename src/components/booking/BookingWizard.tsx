@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Loader2, Check } from "lucide-react";
 import { bookingSchema, type BookingInput } from "@/lib/validators/booking-schema";
+import { submitBooking } from "@/lib/booking-api";
 import { BookingStepEventType } from "./BookingStepEventType";
 import { BookingStepDetails } from "./BookingStepDetails";
 import { BookingStepStyle } from "./BookingStepStyle";
@@ -71,23 +72,16 @@ export function BookingWizard() {
   const onSubmit = methods.handleSubmit(async (data) => {
     setSubmitting(true);
     setServerError(null);
-    try {
-      const res = await fetch("/api/bookings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        setServerError(body?.error ?? "Something went wrong. Please try again.");
-        setSubmitting(false);
-        return;
-      }
-      navigate({ to: "/thank-you" });
-    } catch {
-      setServerError("Network error — please try again.");
+
+    const result = await submitBooking(data);
+
+    if (!result.ok) {
+      setServerError(result.error ?? "Something went wrong. Please try again.");
       setSubmitting(false);
+      return;
     }
+
+    navigate({ to: "/thank-you" });
   });
 
   return (

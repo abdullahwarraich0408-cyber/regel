@@ -1,14 +1,21 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Expand } from "lucide-react";
-import { galleryItems } from "@/data/gallery";
+import { ArrowRight } from "lucide-react";
 import { GalleryCard } from "@/components/cards/GalleryCard";
+import { usePortfolioItems } from "@/hooks/usePortfolioItems";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 export function GalleryPreview() {
-  const preview = galleryItems.slice(0, 6);
+  const { data: portfolioItems = [], isLoading } = usePortfolioItems();
+  const preview = portfolioItems.slice(0, 6);
+  const revealRef = useScrollReveal();
+
+  if (!isLoading && preview.length === 0) {
+    return null;
+  }
   return (
-    <section className="py-16 md:py-20 bg-gradient-to-b from-background to-muted/25">
+    <section ref={revealRef} className="py-16 md:py-20 bg-gradient-to-b from-background to-muted/25">
       <div className="container-prose">
-        <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
+        <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end reveal-on-scroll">
           <div>
             <span className="eyebrow">Our Portfolio</span>
             <h2 className="mt-4 font-display text-4xl leading-tight md:text-5xl text-balance">
@@ -25,11 +32,22 @@ export function GalleryPreview() {
           </Link>
         </div>
 
-        {/* Two-column grid */}
         <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {preview.map((item, i) => (
-            <GalleryCard key={item.id} item={item} className="aspect-[16/10]" index={i} />
-          ))}
+          {isLoading
+            ? Array.from({ length: 4 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="aspect-[16/10] animate-pulse rounded-[1.75rem] bg-muted"
+                />
+              ))
+            : preview.map((item, index) => (
+                <div
+                  key={item.id}
+                  className={`reveal-on-scroll reveal-scale ${index % 2 === 0 ? "reveal-left" : "reveal-right"} reveal-delay-${Math.min(index * 100, 400)}`}
+                >
+                  <GalleryCard item={item} className="aspect-[16/10]" index={index} />
+                </div>
+              ))}
         </div>
       </div>
     </section>

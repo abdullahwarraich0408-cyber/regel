@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { siteConfig } from "@/lib/site-config";
-import { ArrowRight, Instagram, Facebook, Mail, MessageCircle } from "lucide-react";
+import { ArrowRight, Instagram, Facebook, Mail } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 const title = "Contact — Regal Knot Events";
 const description = `Get in touch with Regal Knot Events — premium event decor and styling in Manchester. Email ${siteConfig.email} or send a booking enquiry.`;
@@ -69,7 +70,7 @@ function ContactPage() {
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/50 px-7 h-12 text-base font-medium hover:border-[oklch(0.78_0.06_20)] hover:bg-background/70 backdrop-blur-sm transition-all duration-300"
               >
-                <MessageCircle className="h-4 w-4" /> WhatsApp
+                <WhatsAppIcon className="h-4 w-4 text-[#25D366]" /> WhatsApp
               </a>
             </div>
 

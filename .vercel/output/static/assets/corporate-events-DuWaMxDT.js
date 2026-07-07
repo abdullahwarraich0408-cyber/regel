@@ -1,0 +1,1 @@
+import{P as e,r as t}from"./index-B1lklRIG.js";import{t as n}from"./ServiceLandingPage-BRUYuoFi.js";var r=e(),i=()=>(0,r.jsx)(n,{content:t});export{i as component};

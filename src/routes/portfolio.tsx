@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowRight } from "lucide-react";
-import { galleryItems, type GalleryItem } from "@/data/gallery";
+import { galleryCategories, type GalleryItem } from "@/data/gallery";
 import { GalleryCard } from "@/components/cards/GalleryCard";
+import { usePortfolioItems } from "@/hooks/usePortfolioItems";
 import { siteConfig } from "@/lib/site-config";
 
 const title = "Portfolio — Regal Knot Events";
@@ -23,19 +24,21 @@ export const Route = createFileRoute("/portfolio")({
   component: PortfolioPage,
 });
 
-const categories = ["All", "Weddings", "Birthdays", "Baby Showers", "Balloon Installations", "Romantic Setups", "Custom Backdrops"] as const;
-
 function PortfolioPage() {
-  const [filter, setFilter] = useState<(typeof categories)[number]>("All");
+  const [filter, setFilter] = useState<(typeof galleryCategories)[number]>("All");
+  const { data: portfolioItems = [], isLoading } = usePortfolioItems();
+
   const items = useMemo<GalleryItem[]>(
-    () => (filter === "All" ? galleryItems : galleryItems.filter((g) => g.category === filter)),
-    [filter]
+    () =>
+      filter === "All"
+        ? portfolioItems
+        : portfolioItems.filter((item) => item.category === filter),
+    [filter, portfolioItems]
   );
 
   return (
     <>
       <section className="relative overflow-hidden bg-gradient-hero">
-        {/* Decorative elements */}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute -left-40 top-10 h-[32rem] w-[32rem] rounded-full bg-gradient-to-br from-[oklch(0.85_0.07_20_/_0.35)] to-[oklch(0.7_0.08_310_/_0.25)] blur-3xl" />
           <div className="absolute -right-40 bottom-0 h-[36rem] w-[36rem] rounded-full bg-gradient-to-tl from-[oklch(0.88_0.09_85_/_0.3)] to-[oklch(0.72_0.07_70_/_0.2)] blur-3xl" />
@@ -53,13 +56,11 @@ function PortfolioPage() {
                 </span>
               </h1>
               <p className="max-w-xl text-lg leading-relaxed text-foreground/80 text-balance">
-                Below is a preview layout for real event photography. Each card is a placeholder — once
-                your photos are added, this gallery will showcase the styling we have created for clients
-                across Manchester.
+                Event styling work published from the admin panel appears here
+                automatically.
               </p>
             </div>
 
-            {/* CTA buttons */}
             <div className="flex flex-wrap items-center gap-3">
               <Link
                 to="/booking"
@@ -82,12 +83,12 @@ function PortfolioPage() {
       <section className="py-12">
         <div className="container-prose">
           <div className="flex flex-wrap gap-2">
-            {categories.map((c) => {
-              const active = filter === c;
+            {galleryCategories.map((category) => {
+              const active = filter === category;
               return (
                 <button
-                  key={c}
-                  onClick={() => setFilter(c)}
+                  key={category}
+                  onClick={() => setFilter(category)}
                   className={`rounded-full border px-4 py-2 text-sm transition-all ${
                     active
                       ? "border-[oklch(0.78_0.06_20)] bg-gradient-to-r from-[oklch(0.32_0.06_300_/_0.15)] to-[oklch(0.78_0.06_20_/_0.15)] text-[oklch(0.78_0.06_20)] font-semibold shadow-soft"
@@ -95,17 +96,35 @@ function PortfolioPage() {
                   }`}
                   aria-pressed={active}
                 >
-                  {c}
+                  {category}
                 </button>
               );
             })}
           </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((item) => (
-              <GalleryCard key={item.id} item={item} className="aspect-[4/5]" />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="aspect-[4/5] animate-pulse rounded-[1.75rem] bg-muted"
+                />
+              ))}
+            </div>
+          ) : items.length === 0 ? (
+            <div className="mt-10 rounded-[1.75rem] border border-dashed border-border/70 bg-background/60 px-8 py-16 text-center">
+              <p className="font-display text-3xl text-foreground/90">Portfolio coming soon</p>
+              <p className="mt-3 max-w-md mx-auto text-foreground/65">
+                New event styling work will appear here once it is published from the admin panel.
+              </p>
+            </div>
+          ) : (
+            <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {items.map((item, index) => (
+                <GalleryCard key={item.id} item={item} className="aspect-[4/5]" index={index} linkToDetail />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

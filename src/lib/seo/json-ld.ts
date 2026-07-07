@@ -18,14 +18,18 @@ export const organizationJsonLd = {
   sameAs: [siteConfig.social.instagram, siteConfig.social.facebook].filter(Boolean),
   url: "/",
   priceRange: "££ – ££££",
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: siteConfig.googleReviews.rating,
+    reviewCount: siteConfig.googleReviews.count,
+  },
   makesOffer: {
     "@type": "OfferCatalog",
     name: "Event Decor & Styling",
     itemListElement: [
       "Wedding decor",
-      "Birthday decor",
-      "Baby shower decor",
-      "Party and private event decor",
+      "Private event styling",
+      "Corporate event styling",
       "Custom theme styling",
       "Balloon decoration",
       "Backdrops",
@@ -34,6 +38,8 @@ export const organizationJsonLd = {
     ].map((s) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: s } })),
   },
 };
+
+export const localBusinessJsonLd = organizationJsonLd;
 
 export function faqJsonLd(faqs: { question: string; answer: string }[]) {
   return {

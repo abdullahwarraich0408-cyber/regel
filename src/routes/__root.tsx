@@ -10,19 +10,15 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, useRef, type ReactNode } from "react";
 import Lenis from "lenis";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
 import { siteConfig } from "@/lib/site-config";
 import { organizationJsonLd } from "@/lib/seo/json-ld";
+import { initAnalytics } from "@/lib/analytics";
 
 function NotFoundComponent() {
   return (
@@ -136,27 +132,29 @@ function RootComponent() {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Initialize Lenis smooth scroll
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
     lenisRef.current = lenis;
+    lenis.scrollTo(0, { immediate: true });
 
-    // Update ScrollTrigger on scroll
-    lenis.on("scroll", ScrollTrigger.update);
-
-    // Sync GSAP ticker with Lenis raf
-    const tickerCallback = (time: number) => {
-      lenis.raf(time * 1000);
+    let frame = 0;
+    const raf = (time: number) => {
+      lenis.raf(time);
+      frame = requestAnimationFrame(raf);
     };
-    gsap.ticker.add(tickerCallback);
-    gsap.ticker.lagSmoothing(0);
+    frame = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(frame);
       lenis.destroy();
-      gsap.ticker.remove(tickerCallback);
       lenisRef.current = null;
     };
   }, []);
@@ -169,6 +167,10 @@ function RootComponent() {
     window.scrollTo(0, 0);
   }, [pathname]);
 
+  useEffect(() => {
+    initAnalytics();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col">
@@ -178,6 +180,7 @@ function RootComponent() {
           <Outlet />
         </main>
         <Footer />
+        <WhatsAppButton />
       </div>
     </QueryClientProvider>
   );
