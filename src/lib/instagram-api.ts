@@ -20,15 +20,19 @@ export interface InstagramFeed {
 }
 
 export async function fetchInstagramFeed(): Promise<InstagramFeed> {
+  const baseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
+
   try {
-    const response = await fetch(`${API_URL}/api/instagram/feed`);
+    const response = await fetch(`${baseUrl}/api/instagram/feed`);
 
     if (!response.ok) {
+      console.warn("[instagram] feed request failed", response.status, baseUrl);
       return { posts: [], username: "regal.knot.events", followerCount: 0 };
     }
 
     return (await response.json()) as InstagramFeed;
-  } catch {
+  } catch (error) {
+    console.warn("[instagram] feed request error", baseUrl, error);
     return { posts: [], username: "regal.knot.events", followerCount: 0 };
   }
 }

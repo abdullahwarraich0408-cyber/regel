@@ -7,6 +7,7 @@ export interface Service {
   short: string;
   long: string;
   highlights: string[];
+  imageUrl?: string;
   published?: boolean;
   sortOrder?: number;
 }

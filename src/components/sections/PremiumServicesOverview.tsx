@@ -8,7 +8,14 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useServices } from "@/hooks/useServices";
 import type { Service } from "@/data/services";
 
+const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
 const cardPalettes: [string, string][] = siteConfig.premiumServices.map((service) => service.palette);
+
+function resolveMediaUrl(url: string) {
+  if (!url) return "";
+  if (url.startsWith("http")) return url;
+  return `${API_URL}${url.startsWith("/") ? url : `/${url}`}`;
+}
 
 type ServiceCardData = {
   key: string;
@@ -16,6 +23,7 @@ type ServiceCardData = {
   description: string;
   icon: string;
   palette: [string, string];
+  imageUrl?: string;
 };
 
 function mapApiService(service: Service, index: number): ServiceCardData {
@@ -25,6 +33,7 @@ function mapApiService(service: Service, index: number): ServiceCardData {
     description: service.short,
     icon: service.icon,
     palette: cardPalettes[index % cardPalettes.length],
+    imageUrl: service.imageUrl,
   };
 }
 
@@ -77,6 +86,8 @@ export function PremiumServicesOverview() {
               ))
             : services.map((service, index) => {
                 const Icon = getEventTypeIcon(service.icon);
+                const imageSrc = service.imageUrl ? resolveMediaUrl(service.imageUrl) : "";
+
                 return (
                   <article
                     key={service.key}
@@ -84,11 +95,24 @@ export function PremiumServicesOverview() {
                   >
                     <div
                       className="relative aspect-[4/3] overflow-hidden"
-                      style={{
-                        background: `linear-gradient(135deg, ${service.palette[0]} 0%, ${service.palette[1]} 100%)`,
-                      }}
+                      style={
+                        imageSrc
+                          ? undefined
+                          : {
+                              background: `linear-gradient(135deg, ${service.palette[0]} 0%, ${service.palette[1]} 100%)`,
+                            }
+                      }
                     >
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.4),transparent_60%)]" />
+                      {imageSrc ? (
+                        <img
+                          src={imageSrc}
+                          alt={service.title}
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.4),transparent_60%)]" />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                       <div className="absolute bottom-4 left-4 grid h-12 w-12 place-items-center rounded-xl bg-gradient-gold text-midnight shadow-soft">
                         <Icon className="h-5 w-5" />
                       </div>
