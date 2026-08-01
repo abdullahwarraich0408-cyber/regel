@@ -44,7 +44,7 @@ export function FinalConversionCTA({ source = "homepage_cta" }: { source?: strin
             <p className="mt-2 text-sm text-cream/70">
               Name, phone, event type, and date — takes less than a minute.
             </p>
-            <div className="mt-6 [&_input]:bg-cream [&_select]:bg-cream [&_span]:text-cream/60">
+            <div className="mt-6 [&_input]:bg-white [&_select]:bg-white [&_input]:text-midnight [&_select]:text-midnight [&_span]:text-cream/65 [&_p]:text-cream/55 [&_.enquiry-error]:bg-rose-500/20 [&_.enquiry-error]:text-rose-100">
               <EnquiryForm source={source} />
             </div>
           </div>

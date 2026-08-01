@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { useEffect } from "react";
 import { siteConfig } from "@/lib/site-config";
 import { serviceLinks, utilityLinks } from "./nav-links";
+import { ServiceNavIcon } from "./ServiceNavIcon";
 
 interface MobileNavProps {
   open: boolean;
@@ -48,31 +49,26 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
               Our services
             </p>
             <div className="mt-3 space-y-2">
-              {serviceLinks.map((service) => {
-                const Icon = service.icon;
-                return (
-                  <Link
-                    key={service.to}
-                    to={service.to}
-                    onClick={onClose}
-                    className="group flex items-center gap-3 rounded-2xl border border-cream/10 bg-cream/5 px-3 py-3 transition-all hover:border-soft-gold/35 hover:bg-cream/10"
-                    activeProps={{
-                      className:
-                        "group flex items-center gap-3 rounded-2xl border border-soft-gold/40 bg-cream/10 px-3 py-3 ring-1 ring-soft-gold/20",
-                    }}
-                  >
-                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-gold text-midnight shadow-soft">
-                      <Icon className="h-4 w-4" />
+              {serviceLinks.map((service) => (
+                <Link
+                  key={service.to}
+                  to={service.to}
+                  onClick={onClose}
+                  className="group flex items-center gap-3 rounded-2xl border border-cream/10 bg-cream/5 px-3 py-3 transition-all hover:border-soft-gold/35 hover:bg-cream/10"
+                  activeProps={{
+                    className:
+                      "group flex items-center gap-3 rounded-2xl border border-soft-gold/40 bg-cream/10 px-3 py-3 ring-1 ring-soft-gold/20",
+                  }}
+                >
+                  <ServiceNavIcon icon={service.icon} />
+                  <span className="min-w-0">
+                    <span className="block font-display text-xl leading-none text-cream">
+                      {service.label}
                     </span>
-                    <span className="min-w-0">
-                      <span className="block font-display text-xl leading-none text-cream">
-                        {service.label}
-                      </span>
-                      <span className="mt-1 block text-xs text-cream/55">{service.description}</span>
-                    </span>
-                  </Link>
-                );
-              })}
+                    <span className="mt-1 block text-xs text-cream/55">{service.description}</span>
+                  </span>
+                </Link>
+              ))}
             </div>
           </div>
 

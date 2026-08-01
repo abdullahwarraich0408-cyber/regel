@@ -1,4 +1,9 @@
-import { Briefcase, Cake, Heart, type LucideIcon } from "lucide-react";
+import {
+  Building2,
+  Flower2,
+  PartyPopper,
+  type LucideIcon,
+} from "lucide-react";
 
 export const serviceLinks: readonly {
   to: "/wedding-planning" | "/event-management" | "/corporate-events";
@@ -10,19 +15,19 @@ export const serviceLinks: readonly {
     to: "/wedding-planning",
     label: "Weddings",
     description: "Ceremony & reception styling",
-    icon: Heart,
+    icon: Flower2,
   },
   {
     to: "/event-management",
     label: "Private Events",
     description: "Birthdays & celebrations",
-    icon: Cake,
+    icon: PartyPopper,
   },
   {
     to: "/corporate-events",
     label: "Corporate",
     description: "Brand launches & galas",
-    icon: Briefcase,
+    icon: Building2,
   },
 ] as const;
 

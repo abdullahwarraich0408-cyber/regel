@@ -53,7 +53,7 @@ export const siteConfig = {
       title: "Weddings",
       description:
         "Romantic receptions, ceremony styling, and bespoke wedding decor tailored to your love story.",
-      icon: "heart",
+      icon: "flower-2",
       palette: ["oklch(0.95 0.03 85)", "oklch(0.78 0.06 20)"] as [string, string],
       match: ["wedding"],
     },
@@ -62,7 +62,7 @@ export const siteConfig = {
       title: "Private Events & Birthdays",
       description:
         "Milestone birthdays, baby showers, and intimate celebrations styled with luxury and personality.",
-      icon: "cake",
+      icon: "party-popper",
       palette: ["oklch(0.32 0.06 300)", "oklch(0.8 0.08 85)"] as [string, string],
       match: ["birthday", "baby", "party", "private", "shower"],
     },

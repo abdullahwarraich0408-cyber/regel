@@ -4,6 +4,7 @@ import { ChevronDown, Menu } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { MobileNav } from "./MobileNav";
 import { serviceLinks, utilityLinks } from "./nav-links";
+import { ServiceNavIcon } from "./ServiceNavIcon";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -117,33 +118,31 @@ export function Navbar() {
                     </p>
                   </div>
                   <div className="mt-1 space-y-1">
-                    {serviceLinks.map((service) => {
-                      const Icon = service.icon;
-                      return (
-                        <Link
-                          key={service.to}
-                          to={service.to}
-                          onClick={() => setServicesOpen(false)}
-                          className="group flex items-start gap-3 rounded-xl px-3 py-3 transition-all hover:bg-cream/10"
-                          activeProps={{
-                            className:
-                              "group flex items-start gap-3 rounded-xl bg-cream/10 px-3 py-3 ring-1 ring-soft-gold/30",
-                          }}
-                        >
-                          <span className="mt-0.5 grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-gold text-midnight shadow-soft transition-transform group-hover:scale-105">
-                            <Icon className="h-4 w-4" />
+                    {serviceLinks.map((service) => (
+                      <Link
+                        key={service.to}
+                        to={service.to}
+                        onClick={() => setServicesOpen(false)}
+                        className="group flex items-start gap-3 rounded-xl px-3 py-3 transition-all hover:bg-cream/10"
+                        activeProps={{
+                          className:
+                            "group flex items-start gap-3 rounded-xl bg-cream/10 px-3 py-3 ring-1 ring-soft-gold/30",
+                        }}
+                      >
+                        <ServiceNavIcon
+                          icon={service.icon}
+                          className="mt-0.5 transition-transform group-hover:scale-105"
+                        />
+                        <span className="min-w-0">
+                          <span className="block font-display text-lg leading-none text-cream group-hover:text-soft-gold">
+                            {service.label}
                           </span>
-                          <span className="min-w-0">
-                            <span className="block font-display text-lg leading-none text-cream group-hover:text-soft-gold">
-                              {service.label}
-                            </span>
-                            <span className="mt-1 block text-xs leading-snug text-cream/55">
-                              {service.description}
-                            </span>
+                          <span className="mt-1 block text-xs leading-snug text-cream/55">
+                            {service.description}
                           </span>
-                        </Link>
-                      );
-                    })}
+                        </span>
+                      </Link>
+                    ))}
                   </div>
                   <Link
                     to="/services"
