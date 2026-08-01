@@ -7,6 +7,7 @@ import { getEventTypeIcon } from "@/lib/event-type-icons";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useServices } from "@/hooks/useServices";
 import type { Service } from "@/data/services";
+import { serviceLinks } from "@/components/layout/nav-links";
 
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
 
@@ -17,13 +18,10 @@ function resolveMediaUrl(url: string) {
 }
 
 type Pillar = (typeof siteConfig.premiumServices)[number];
-type PillarRoute = `/${Pillar["slug"]}`;
 
-const pillarRoutes: Record<Pillar["slug"], PillarRoute> = {
-  "wedding-planning": "/wedding-planning",
-  "event-management": "/event-management",
-  "corporate-events": "/corporate-events",
-};
+const pillarRoutes = Object.fromEntries(
+  serviceLinks.map((link) => [link.to.replace(/^\//, ""), link.to]),
+) as Record<Pillar["slug"], (typeof serviceLinks)[number]["to"]>;
 
 type ServiceCardData = {
   key: string;

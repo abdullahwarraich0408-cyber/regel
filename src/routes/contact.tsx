@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { siteConfig } from "@/lib/site-config";
-import { ArrowRight, Instagram, Facebook, Mail } from "lucide-react";
+import { ArrowRight, Instagram, Facebook } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 const title = "Contact — Regal Knot Events";
@@ -43,32 +43,32 @@ function ContactPage() {
                   something beautiful
                 </span>
               </h1>
-              <p className="max-w-xl text-lg leading-relaxed text-foreground/80 text-balance">
-                For event enquiries, the fastest way to get a tailored response is via our booking form.
-                For everything else, our details are below.
+              <p className="max-w-xl text-lg leading-relaxed text-balance text-foreground/80">
+                Send a short enquiry below — name, phone, event type, and date — or message us on
+                WhatsApp for a faster reply.
               </p>
             </div>
 
             {/* CTA buttons */}
             <div className="flex flex-wrap items-center gap-3">
+              <a
+                href="#enquire"
+                className="inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[oklch(0.32_0.06_300)] to-[oklch(0.78_0.06_20)] px-7 text-base font-semibold text-cream shadow-luxury transition-all duration-300 hover:scale-[1.02] hover:brightness-110 hover:shadow-elegant"
+              >
+                Send enquiry
+                <ArrowRight className="h-4 w-4" />
+              </a>
               <Link
                 to="/booking"
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[oklch(0.32_0.06_300)] to-[oklch(0.78_0.06_20)] text-cream text-base font-semibold hover:brightness-110 shadow-luxury hover:shadow-elegant hover:scale-[1.02] transition-all duration-300 px-7 h-12"
+                className="inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/50 px-7 text-base font-medium backdrop-blur-sm transition-all duration-300 hover:border-[oklch(0.78_0.06_20)] hover:bg-background/70"
               >
                 {siteConfig.cta.primary}
-                <ArrowRight className="h-4 w-4" />
               </Link>
-              <a
-                href={`mailto:${siteConfig.email}`}
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/50 px-7 h-12 text-base font-medium hover:border-[oklch(0.78_0.06_20)] hover:bg-background/70 backdrop-blur-sm transition-all duration-300"
-              >
-                <Mail className="h-4 w-4" /> Email us
-              </a>
               <a
                 href={`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/50 px-7 h-12 text-base font-medium hover:border-[oklch(0.78_0.06_20)] hover:bg-background/70 backdrop-blur-sm transition-all duration-300"
+                className="inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/50 px-7 text-base font-medium backdrop-blur-sm transition-all duration-300 hover:border-[oklch(0.78_0.06_20)] hover:bg-background/70"
               >
                 <WhatsAppIcon className="h-4 w-4 text-[#25D366]" /> WhatsApp
               </a>
