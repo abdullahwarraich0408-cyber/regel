@@ -1,5 +1,6 @@
 import { absoluteUrl } from "@/lib/site-config";
 import { localBusinessJsonLd } from "@/lib/seo/json-ld";
+import type { GalleryCategory } from "@/data/gallery";
 
 export interface ServicePageContent {
   slug: string;
@@ -11,6 +12,9 @@ export interface ServicePageContent {
   paragraphs: string[];
   highlights: string[];
   whatsappMessage: string;
+  portfolioCategory: Exclude<GalleryCategory, "All">;
+  palette: [string, string];
+  process: { step: string; title: string; detail: string }[];
   seo: {
     title: string;
     description: string;
@@ -38,6 +42,25 @@ export const weddingPlanningPage: ServicePageContent = {
     "Manchester & North West coverage",
   ],
   whatsappMessage: "Hi, I'd like to enquire about wedding styling in Manchester.",
+  portfolioCategory: "Weddings",
+  palette: ["oklch(0.95 0.03 85)", "oklch(0.78 0.06 20)"],
+  process: [
+    {
+      step: "01",
+      title: "Share your vision",
+      detail: "Tell us your date, venue, and the atmosphere you want to create.",
+    },
+    {
+      step: "02",
+      title: "Design & propose",
+      detail: "We shape a tailored styling plan with concepts, flow, and clear pricing.",
+    },
+    {
+      step: "03",
+      title: "Flawless delivery",
+      detail: "Our team handles setup, styling, and pack-down so you can enjoy the day.",
+    },
+  ],
   seo: {
     title: "Wedding Planning & Coordination Manchester UK | Regal Knot Events",
     description:
@@ -67,6 +90,25 @@ export const eventManagementPage: ServicePageContent = {
     "Flexible packages for every budget",
   ],
   whatsappMessage: "Hi, I'd like to enquire about private event styling.",
+  portfolioCategory: "Private Events",
+  palette: ["oklch(0.32 0.06 300)", "oklch(0.8 0.08 85)"],
+  process: [
+    {
+      step: "01",
+      title: "Theme & brief",
+      detail: "We capture your colour story, guest count, and must-have moments.",
+    },
+    {
+      step: "02",
+      title: "Styled concept",
+      detail: "Mood boards, layout ideas, and a clear package that fits your budget.",
+    },
+    {
+      step: "03",
+      title: "Celebrate",
+      detail: "We install, style, and reset so the celebration feels effortless.",
+    },
+  ],
   seo: {
     title: "Event Management Manchester UK | Private Events & Birthdays",
     description:
@@ -96,6 +138,25 @@ export const corporateEventsPage: ServicePageContent = {
     "Professional setup and pack-down",
   ],
   whatsappMessage: "Hi, I'd like to enquire about corporate event styling.",
+  portfolioCategory: "Corporate",
+  palette: ["oklch(0.20 0.01 260)", "oklch(0.55 0.06 150)"],
+  process: [
+    {
+      step: "01",
+      title: "Brand briefing",
+      detail: "We align on messaging, audience, venue constraints, and timelines.",
+    },
+    {
+      step: "02",
+      title: "Spatial design",
+      detail: "Installations, focal points, and guest flow planned to professional standards.",
+    },
+    {
+      step: "03",
+      title: "On-brief delivery",
+      detail: "Punctual setup, polished finish, and discreet pack-down after the event.",
+    },
+  ],
   seo: {
     title: "Corporate Events Manchester UK | Regal Knot Events",
     description:
