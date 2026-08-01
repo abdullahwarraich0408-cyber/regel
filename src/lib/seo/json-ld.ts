@@ -1,9 +1,9 @@
-import { siteConfig } from "@/lib/site-config";
+import { absoluteUrl, siteConfig } from "@/lib/site-config";
 
 export const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "@id": "#regal-knot-events",
+  "@id": `${siteConfig.siteUrl}/#regal-knot-events`,
   name: siteConfig.name,
   description: siteConfig.description,
   areaServed: siteConfig.serviceArea,
@@ -16,7 +16,8 @@ export const organizationJsonLd = {
   email: siteConfig.email,
   telephone: siteConfig.phone,
   sameAs: [siteConfig.social.instagram, siteConfig.social.facebook].filter(Boolean),
-  url: "/",
+  url: absoluteUrl("/"),
+  image: siteConfig.ogImage || undefined,
   priceRange: "££ – ££££",
   aggregateRating: {
     "@type": "AggregateRating",

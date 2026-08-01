@@ -1,8 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Instagram } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight, Instagram } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
+import { trackConversion } from "@/lib/analytics";
 import { useInstagramFeed } from "@/hooks/useInstagramFeed";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { InstagramCarouselSlide } from "@/components/cards/InstagramCarouselSlide";
@@ -98,21 +100,14 @@ export function InstagramSection() {
       <div className="container-prose">
         <div className="flex flex-col items-start justify-between gap-5 reveal-on-scroll sm:gap-6 md:flex-row md:items-end">
           <div className="min-w-0 flex-1">
-            <span className="eyebrow">Real Events, Real Moments</span>
+            <span className="eyebrow">Social Proof</span>
             <h2 className="mt-3 font-display text-[1.75rem] leading-tight sm:text-3xl md:text-4xl">
-              Follow our latest
-              <span className="block text-dusty-rose italic">celebrations on Instagram</span>
+              Real events from
+              <span className="block text-dusty-rose italic">@{username}</span>
             </h2>
             <p className="mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground sm:mt-4">
-              Live from{" "}
-              <a
-                href={profileUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="font-semibold text-deep-plum hover:text-dusty-rose"
-              >
-                @{username}
-              </a>
+              Scroll our latest weddings, celebrations, and behind-the-scenes styling — then check
+              availability for your date.
               {followerCount > 0 ? ` · ${followerCount.toLocaleString()} followers` : ""}
             </p>
           </div>
@@ -123,7 +118,7 @@ export function InstagramSection() {
             className="inline-flex h-11 w-full min-h-[44px] shrink-0 items-center justify-center gap-2 rounded-full border border-border/70 bg-background px-5 text-sm font-semibold transition-all hover:border-dusty-rose hover:shadow-soft sm:h-12 sm:w-auto sm:px-6 md:min-h-[48px]"
           >
             <Instagram className="h-4 w-4" />
-            @{username}
+            Follow on Instagram
           </a>
         </div>
 
@@ -141,14 +136,34 @@ export function InstagramSection() {
             </div>
           ) : posts.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-border/70 px-5 py-10 text-center sm:rounded-[1.75rem] sm:px-6 sm:py-12">
-              <p className="font-display text-xl text-foreground/85 sm:text-2xl">Instagram feed loading soon</p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Follow us on{" "}
-                <a href={profileUrl} target="_blank" rel="noreferrer" className="text-dusty-rose">
-                  @{username}
-                </a>{" "}
-                for the latest event styling.
+              <p className="font-display text-xl text-foreground/85 sm:text-2xl">
+                See our real event work on Instagram
               </p>
+              <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+                Our latest celebrations live on @{username}. Follow for proof of every setup — then
+                enquire about your date.
+              </p>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                <a
+                  href={profileUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-border/70 bg-background px-5 text-sm font-semibold hover:border-dusty-rose"
+                >
+                  <Instagram className="h-4 w-4" />
+                  Follow @{username}
+                </a>
+                <Link
+                  to="/booking"
+                  onClick={() =>
+                    trackConversion("availability_click", { location: "instagram_empty" })
+                  }
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-midnight px-5 text-sm font-semibold text-cream"
+                >
+                  {siteConfig.cta.primary}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
             </div>
           ) : (
             <div className="relative mx-auto w-full max-w-[1280px]">
@@ -208,6 +223,30 @@ export function InstagramSection() {
             </div>
           )}
         </div>
+
+        {posts.length > 0 ? (
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 reveal-on-scroll sm:mt-10">
+            <a
+              href={profileUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-border/70 bg-background px-6 text-sm font-semibold transition-all hover:border-dusty-rose hover:shadow-soft"
+            >
+              <Instagram className="h-4 w-4" />
+              Follow on Instagram
+            </a>
+            <Link
+              to="/booking"
+              onClick={() =>
+                trackConversion("availability_click", { location: "instagram_section" })
+              }
+              className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-midnight px-6 text-sm font-semibold text-cream shadow-soft transition-all hover:scale-[1.02]"
+            >
+              {siteConfig.cta.primary}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        ) : null}
       </div>
     </section>
   );

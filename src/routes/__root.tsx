@@ -16,7 +16,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
-import { siteConfig } from "@/lib/site-config";
+import { MobileStickyCTA } from "@/components/conversion/MobileStickyCTA";
+import { absoluteUrl, siteConfig } from "@/lib/site-config";
 import { organizationJsonLd } from "@/lib/seo/json-ld";
 import { initAnalytics } from "@/lib/analytics";
 
@@ -80,13 +81,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: `${siteConfig.name} — Premium Event Decor in Manchester` },
+      { title: `${siteConfig.name} — Luxury Wedding & Event Styling in Manchester, UK` },
       { name: "description", content: siteConfig.description },
       { name: "author", content: siteConfig.name },
       { property: "og:site_name", content: siteConfig.name },
-      { property: "og:title", content: `${siteConfig.name} — Premium Event Decor in Manchester` },
+      {
+        property: "og:title",
+        content: `${siteConfig.name} — Luxury Wedding & Event Styling in Manchester, UK`,
+      },
       { property: "og:description", content: siteConfig.description },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: absoluteUrl("/") },
+      ...(siteConfig.ogImage
+        ? [
+            { property: "og:image", content: siteConfig.ogImage },
+            { name: "twitter:image", content: siteConfig.ogImage },
+          ]
+        : []),
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#f7f3ea" },
     ],
@@ -180,6 +191,8 @@ function RootComponent() {
           <Outlet />
         </main>
         <Footer />
+        <div className="h-20 w-full shrink-0 md:hidden" aria-hidden />
+        <MobileStickyCTA />
         <WhatsAppButton />
       </div>
     </QueryClientProvider>

@@ -9,7 +9,6 @@ import { useServices } from "@/hooks/useServices";
 import type { Service } from "@/data/services";
 
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
-const cardPalettes: [string, string][] = siteConfig.premiumServices.map((service) => service.palette);
 
 function resolveMediaUrl(url: string) {
   if (!url) return "";
@@ -17,8 +16,18 @@ function resolveMediaUrl(url: string) {
   return `${API_URL}${url.startsWith("/") ? url : `/${url}`}`;
 }
 
+type Pillar = (typeof siteConfig.premiumServices)[number];
+type PillarRoute = `/${Pillar["slug"]}`;
+
+const pillarRoutes: Record<Pillar["slug"], PillarRoute> = {
+  "wedding-planning": "/wedding-planning",
+  "event-management": "/event-management",
+  "corporate-events": "/corporate-events",
+};
+
 type ServiceCardData = {
   key: string;
+  slug: Pillar["slug"];
   title: string;
   description: string;
   icon: string;
@@ -26,26 +35,23 @@ type ServiceCardData = {
   imageUrl?: string;
 };
 
-function mapApiService(service: Service, index: number): ServiceCardData {
-  return {
-    key: service.id,
-    title: service.title,
-    description: service.short,
-    icon: service.icon,
-    palette: cardPalettes[index % cardPalettes.length],
-    imageUrl: service.imageUrl,
-  };
+function matchApiImage(pillar: Pillar, apiServices: Service[]) {
+  const matched = apiServices.find((service) => {
+    const haystack = `${service.slug} ${service.title}`.toLowerCase();
+    return pillar.match.some((token) => haystack.includes(token));
+  });
+  return matched?.imageUrl ? resolveMediaUrl(matched.imageUrl) : undefined;
 }
 
-function mapFallbackService(
-  service: (typeof siteConfig.premiumServices)[number],
-): ServiceCardData {
+function mapPillar(pillar: Pillar, apiServices: Service[]): ServiceCardData {
   return {
-    key: service.slug,
-    title: service.title,
-    description: service.description,
-    icon: service.icon,
-    palette: service.palette,
+    key: pillar.slug,
+    slug: pillar.slug,
+    title: pillar.title,
+    description: pillar.description,
+    icon: pillar.icon,
+    palette: pillar.palette,
+    imageUrl: matchApiImage(pillar, apiServices),
   };
 }
 
@@ -53,10 +59,9 @@ export function PremiumServicesOverview() {
   const { data: apiServices = [], isLoading } = useServices();
   const revealRef = useScrollReveal([isLoading, apiServices.length]);
 
-  const services: ServiceCardData[] =
-    apiServices.length > 0
-      ? apiServices.slice(0, 3).map(mapApiService)
-      : siteConfig.premiumServices.map(mapFallbackService);
+  const services = siteConfig.premiumServices.map((pillar) =>
+    mapPillar(pillar, apiServices),
+  );
 
   return (
     <section ref={revealRef} className="bg-gradient-to-b from-muted/10 to-background py-16 md:py-24">
@@ -67,6 +72,10 @@ export function PremiumServicesOverview() {
             Premium styling for every
             <span className="block text-dusty-rose">celebration</span>
           </h2>
+          <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground">
+            Dedicated pages for weddings, private celebrations, and corporate events — built for
+            UK hosts who want luxury coordination without the guesswork.
+          </p>
         </div>
 
         <div className="mt-14 grid gap-6 md:grid-cols-3">
@@ -86,15 +95,16 @@ export function PremiumServicesOverview() {
               ))
             : services.map((service, index) => {
                 const Icon = getEventTypeIcon(service.icon);
-                const imageSrc = service.imageUrl ? resolveMediaUrl(service.imageUrl) : "";
+                const imageSrc = service.imageUrl ?? "";
 
                 return (
                   <article
                     key={service.key}
                     className={`reveal-on-scroll reveal-delay-${index * 100} group flex flex-col overflow-hidden rounded-[1.75rem] border border-border/60 bg-card shadow-soft transition-all duration-500 hover:-translate-y-2 hover:border-dusty-rose/40 hover:shadow-elegant`}
                   >
-                    <div
-                      className="relative aspect-[4/3] overflow-hidden"
+                    <Link
+                      to={pillarRoutes[service.slug]}
+                      className="relative block aspect-[4/3] overflow-hidden"
                       style={
                         imageSrc
                           ? undefined
@@ -116,17 +126,17 @@ export function PremiumServicesOverview() {
                       <div className="absolute bottom-4 left-4 grid h-12 w-12 place-items-center rounded-xl bg-gradient-gold text-midnight shadow-soft">
                         <Icon className="h-5 w-5" />
                       </div>
-                    </div>
+                    </Link>
                     <div className="flex flex-1 flex-col p-7">
                       <h3 className="font-display text-2xl">{service.title}</h3>
                       <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
                         {service.description}
                       </p>
                       <Link
-                        to="/services"
+                        to={pillarRoutes[service.slug]}
                         className="mt-6 inline-flex h-11 min-h-[44px] items-center gap-2 text-sm font-semibold text-deep-plum transition-colors hover:text-dusty-rose"
                       >
-                        Learn More
+                        Explore {service.title}
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </Link>
                     </div>

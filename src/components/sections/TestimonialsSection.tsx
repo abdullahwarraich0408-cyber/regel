@@ -103,7 +103,7 @@ export function TestimonialsSection() {
               </p>
             </div>
             <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-deep-plum sm:mt-0">
-              Read reviews
+              Read Google reviews
               <ExternalLink className="h-4 w-4" />
             </span>
           </a>

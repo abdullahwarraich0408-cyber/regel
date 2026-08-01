@@ -77,31 +77,36 @@ function PortfolioDetailPage() {
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   to="/booking"
-                  className="inline-flex h-12 items-center gap-2 rounded-full bg-gradient-to-r from-deep-plum to-dusty-rose px-7 text-sm font-semibold text-cream shadow-luxury"
+                  onClick={() =>
+                    trackConversion("availability_click", { location: "portfolio_detail" })
+                  }
+                  className="inline-flex h-12 min-h-[48px] items-center gap-2 rounded-full bg-gradient-to-r from-deep-plum to-dusty-rose px-7 text-sm font-semibold text-cream shadow-luxury"
                 >
-                  Plan a similar event
+                  {siteConfig.cta.primary}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
-                {item.instagramUrl ? (
-                  <a
-                    href={item.instagramUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex h-12 items-center gap-2 rounded-full border border-border/70 px-7 text-sm font-semibold"
-                  >
-                    <Instagram className="h-4 w-4" />
-                    View on Instagram
-                  </a>
-                ) : null}
                 <a
-                  href={whatsappUrl(`Hi, I loved your ${item.title} portfolio piece and would like to enquire.`)}
+                  href={item.instagramUrl || siteConfig.social.instagram}
                   target="_blank"
                   rel="noreferrer"
-                  onClick={() => trackConversion("whatsapp_click", { location: "portfolio_detail" })}
-                  className="inline-flex h-12 items-center gap-2 rounded-full bg-[#25D366] px-7 text-sm font-semibold text-white"
+                  className="inline-flex h-12 min-h-[48px] items-center gap-2 rounded-full border border-border/70 px-7 text-sm font-semibold"
+                >
+                  <Instagram className="h-4 w-4" />
+                  {item.instagramUrl ? "View on Instagram" : "Follow on Instagram"}
+                </a>
+                <a
+                  href={whatsappUrl(
+                    `Hi, I loved your ${item.title} event and would like to enquire about a similar celebration.`,
+                  )}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() =>
+                    trackConversion("whatsapp_click", { location: "portfolio_detail" })
+                  }
+                  className="inline-flex h-12 min-h-[48px] items-center gap-2 rounded-full bg-[#25D366] px-7 text-sm font-semibold text-white"
                 >
                   <WhatsAppIcon className="h-4 w-4" />
-                  WhatsApp
+                  {siteConfig.cta.whatsapp}
                 </a>
               </div>
             </div>

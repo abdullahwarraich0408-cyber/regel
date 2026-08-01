@@ -59,13 +59,20 @@ export function MobileNav({ open, onClose, links }: MobileNavProps) {
           ))}
         </nav>
 
-        <div className="mt-auto space-y-4 pt-8">
+        <div className="mt-auto space-y-3 pt-8">
             <Link
               to="/booking"
               onClick={onClose}
-              className="w-full rounded-full bg-gradient-gold text-midnight text-sm font-semibold hover:brightness-105 transition-all inline-flex items-center justify-center gap-2 whitespace-nowrap h-11 px-4 shadow-soft"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-gold px-4 text-sm font-semibold text-midnight shadow-soft transition-all hover:brightness-105"
             >
               {siteConfig.cta.primary}
+            </Link>
+            <Link
+              to="/services"
+              onClick={onClose}
+              className="inline-flex h-11 w-full items-center justify-center rounded-full border border-cream/25 px-4 text-sm font-semibold text-cream/90 transition-all hover:bg-cream/10"
+            >
+              View all services
             </Link>
             <p className="text-center text-xs text-cream/60">
               {siteConfig.location} · {siteConfig.email}

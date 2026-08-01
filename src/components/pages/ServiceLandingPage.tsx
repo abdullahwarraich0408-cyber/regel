@@ -2,7 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { FinalConversionCTA } from "@/components/sections/FinalConversionCTA";
-import { whatsappUrl } from "@/lib/site-config";
+import { FAQSection } from "@/components/sections/FAQSection";
+import { siteConfig, whatsappUrl } from "@/lib/site-config";
 import { trackConversion } from "@/lib/analytics";
 import type { ServicePageContent } from "@/lib/seo/service-pages";
 
@@ -28,7 +29,7 @@ export function ServiceLandingPage({ content }: { content: ServicePageContent })
               onClick={() => trackConversion("availability_click", { page: content.slug })}
               className="inline-flex h-12 min-h-[48px] items-center gap-2 rounded-full bg-gradient-to-r from-deep-plum to-dusty-rose px-7 text-sm font-semibold text-cream shadow-luxury"
             >
-              Check Availability
+              {siteConfig.cta.primary}
               <ArrowRight className="h-4 w-4" />
             </Link>
             <a
@@ -39,7 +40,7 @@ export function ServiceLandingPage({ content }: { content: ServicePageContent })
               className="inline-flex h-12 min-h-[48px] items-center gap-2 rounded-full border border-border/70 bg-background/70 px-7 text-sm font-semibold backdrop-blur-sm"
             >
               <WhatsAppIcon className="h-4 w-4 text-[#25D366]" />
-              WhatsApp Us
+              {siteConfig.cta.whatsapp}
             </a>
           </div>
         </div>
@@ -76,6 +77,7 @@ export function ServiceLandingPage({ content }: { content: ServicePageContent })
         </div>
       </section>
 
+      <FAQSection limit={4} />
       <FinalConversionCTA />
     </>
   );

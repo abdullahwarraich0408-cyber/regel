@@ -1,3 +1,4 @@
+import { absoluteUrl } from "@/lib/site-config";
 import { localBusinessJsonLd } from "@/lib/seo/json-ld";
 
 export interface ServicePageContent {
@@ -38,11 +39,11 @@ export const weddingPlanningPage: ServicePageContent = {
   ],
   whatsappMessage: "Hi, I'd like to enquire about wedding styling in Manchester.",
   seo: {
-    title: "Wedding Planning Manchester | Regal Knot Events",
+    title: "Wedding Planning & Coordination Manchester UK | Regal Knot Events",
     description:
-      "Premium wedding planning and decor in Manchester. Bespoke styling, ceremony arches, reception design and full coordination across Greater Manchester.",
+      "Luxury wedding planning and decor in Manchester and the UK. Bespoke styling, ceremony arches, reception design and full coordination across Greater Manchester.",
     keywords:
-      "wedding planning Manchester, wedding decor Manchester, wedding styling UK, luxury wedding Manchester",
+      "wedding planning Manchester, wedding coordination UK, wedding decor Manchester, luxury wedding Manchester",
   },
 };
 
@@ -67,11 +68,11 @@ export const eventManagementPage: ServicePageContent = {
   ],
   whatsappMessage: "Hi, I'd like to enquire about private event styling.",
   seo: {
-    title: "Event Management Manchester | Private Events & Birthdays",
+    title: "Event Management Manchester UK | Private Events & Birthdays",
     description:
-      "Premium private event management and styling in Manchester. Birthdays, baby showers, anniversaries and bespoke celebrations across the North West.",
+      "Premium private event management and styling in Manchester and the UK. Birthdays, baby showers, anniversaries and bespoke celebrations across the North West.",
     keywords:
-      "event management Manchester, birthday party styling, private event decor UK, event styling Manchester",
+      "event management Manchester, birthday party styling UK, private event decor UK, event styling Manchester",
   },
 };
 
@@ -96,11 +97,11 @@ export const corporateEventsPage: ServicePageContent = {
   ],
   whatsappMessage: "Hi, I'd like to enquire about corporate event styling.",
   seo: {
-    title: "Corporate Events Manchester | Regal Knot Events",
+    title: "Corporate Events Manchester UK | Regal Knot Events",
     description:
-      "Premium corporate event styling in Manchester. Brand launches, awards evenings, galas and business celebrations across Greater Manchester.",
+      "Premium corporate event styling in Manchester and the UK. Brand launches, awards evenings, galas and business celebrations across Greater Manchester.",
     keywords:
-      "corporate events Manchester, corporate event styling UK, brand launch decor, awards evening styling Manchester",
+      "corporate events Manchester UK, corporate event styling UK, brand launch decor, awards evening styling Manchester",
   },
 };
 
@@ -110,6 +111,7 @@ export function servicePageJsonLd(content: ServicePageContent) {
     "@type": ["LocalBusiness", "Service"],
     name: `${content.seo.title.split("|")[0]?.trim()} — Regal Knot Events`,
     description: content.seo.description,
+    url: absoluteUrl(`/${content.slug}`),
     areaServed: {
       "@type": "AdministrativeArea",
       name: "Greater Manchester",

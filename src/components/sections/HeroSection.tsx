@@ -1,14 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig, whatsappUrl } from "@/lib/site-config";
 import { trackConversion } from "@/lib/analytics";
-import { buildHeroFanImages, heroFallbackImages } from "@/lib/hero-fan-images";
+import { buildHeroFanImages } from "@/lib/hero-fan-images";
 import { resolvePortfolioMediaUrl } from "@/lib/portfolio-api";
 import { useInstagramFeed } from "@/hooks/useInstagramFeed";
 import { usePortfolioItems } from "@/hooks/usePortfolioItems";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 const sizeClasses = {
   "fan-outer":
@@ -79,22 +80,20 @@ function HeroFanCard({
   index: number;
 }) {
   const [src, setSrc] = useState(image.imageUrl);
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState(!image.imageUrl);
   const isCenter = Boolean(image.featured);
   const hiddenOnMobile = index === 0 || index === 4;
 
+  useEffect(() => {
+    setSrc(image.imageUrl);
+    setFailed(!image.imageUrl);
+  }, [image.imageUrl]);
+
   const handleError = () => {
-    if (src !== image.fallbackUrl) {
+    if (image.fallbackUrl && src !== image.fallbackUrl) {
       setSrc(image.fallbackUrl);
       return;
     }
-
-    const backup = heroFallbackImages[index];
-    if (src !== backup) {
-      setSrc(backup);
-      return;
-    }
-
     setFailed(true);
   };
 
@@ -118,7 +117,7 @@ function HeroFanCard({
           }}
         />
 
-        {!failed ? (
+        {!failed && src ? (
           <img
             src={src}
             alt={image.title}
@@ -135,10 +134,10 @@ function HeroFanCard({
           <div className="absolute inset-x-0 bottom-0 p-2 sm:p-2.5 lg:p-3">
             <Link
               to="/booking"
-              onClick={() => trackConversion("consultation_click")}
+              onClick={() => trackConversion("availability_click", { location: "hero_fan" })}
               className="inline-flex h-8 w-full items-center justify-center rounded-full border border-midnight/15 bg-cream/95 px-3 text-[11px] font-semibold text-midnight shadow-soft transition-all hover:bg-cream sm:h-9 sm:text-xs lg:h-10 lg:text-sm"
             >
-              Get started
+              {siteConfig.cta.getQuote}
             </Link>
           </div>
         ) : null}
@@ -172,15 +171,31 @@ export function HeroSection() {
 
       <div className="container-prose relative z-10 flex min-h-[calc(100svh-5rem)] flex-col items-center justify-between px-4 pb-4 pt-8 text-center sm:pb-5 sm:pt-10 md:pt-12 lg:pb-6 lg:pt-14">
         <div className="flex shrink-0 flex-col items-center">
-          <Link
-            to="/booking"
-            onClick={() => trackConversion("availability_click")}
-            className="hero-fade-in inline-flex items-center gap-1.5 rounded-full bg-midnight px-4 py-2 text-xs font-semibold text-cream shadow-soft transition-transform hover:scale-[1.03] sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+          <div
+            className="hero-fade-in flex flex-wrap items-center justify-center gap-2 sm:gap-3"
             style={{ animationDelay: "0.05s" }}
           >
-            Plan your celebration
-            <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-          </Link>
+            <Link
+              to="/booking"
+              onClick={() => trackConversion("availability_click", { location: "hero_primary" })}
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full bg-midnight px-4 py-2.5 text-xs font-semibold text-cream shadow-soft transition-transform hover:scale-[1.03] sm:gap-2 sm:px-5 sm:text-sm"
+            >
+              {siteConfig.cta.primary}
+              <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            </Link>
+            <a
+              href={whatsappUrl(
+                "Hi Regal Knot Events, I'd like to book a consultation for my event.",
+              )}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => trackConversion("consultation_click", { location: "hero_secondary" })}
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-midnight/15 bg-background/90 px-4 py-2.5 text-xs font-semibold text-midnight shadow-soft transition-transform hover:scale-[1.03] hover:border-dusty-rose/40 sm:gap-2 sm:px-5 sm:text-sm"
+            >
+              <WhatsAppIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              {siteConfig.cta.secondary}
+            </a>
+          </div>
 
           <div
             className="hero-fade-in relative mx-auto mt-3 max-w-4xl sm:mt-4 lg:mt-5"
@@ -189,10 +204,10 @@ export function HeroSection() {
             <HeroScribbleLeft className="absolute -left-6 top-0 hidden text-deep-plum/70 lg:-left-12 lg:block" />
             <HeroScribbleRight className="absolute -right-6 top-4 hidden text-deep-plum/70 lg:-right-10 lg:block" />
 
-            <h1 className="mx-auto max-w-[16ch] font-sans text-[1.45rem] font-bold leading-[1.1] tracking-tight text-midnight sm:max-w-3xl sm:text-3xl md:text-4xl lg:max-w-4xl lg:text-[2.65rem] lg:leading-[1.08]">
-              Connect with professional event styling for your{" "}
+            <h1 className="mx-auto max-w-[18ch] font-sans text-[1.45rem] font-bold leading-[1.1] tracking-tight text-midnight sm:max-w-3xl sm:text-3xl md:text-4xl lg:max-w-4xl lg:text-[2.65rem] lg:leading-[1.08]">
+              Luxury wedding &amp; event styling for{" "}
               <span className="relative inline-block">
-                dream celebration
+                unforgettable celebrations
                 <span className="absolute -bottom-0.5 left-0 right-0 hidden h-2 border-b-2 border-dusty-rose/45 rounded-full lg:block" />
               </span>
             </h1>
@@ -202,8 +217,8 @@ export function HeroSection() {
             className="hero-fade-in mx-auto mt-2 max-w-xl text-xs leading-snug text-muted-foreground sm:mt-3 sm:max-w-2xl sm:text-sm lg:text-base"
             style={{ animationDelay: "0.2s" }}
           >
-            Find, plan, and book bespoke wedding and event styling across Manchester —
-            tailored to your vision, venue, and budget.
+            Premium wedding coordination and bespoke event styling across Manchester and the UK —
+            tailored to your venue, vision, and budget.
           </p>
         </div>
 
@@ -214,7 +229,7 @@ export function HeroSection() {
           <div className="mx-auto flex max-w-5xl items-end justify-center gap-1 sm:gap-1.5 md:gap-2 lg:gap-3">
             {fanImages.map((image, index) => (
               <HeroFanCard
-                key={`${image.title}-${image.imageUrl}`}
+                key={`${image.title}-${image.imageUrl || "gradient"}-${index}`}
                 image={image}
                 index={index}
               />

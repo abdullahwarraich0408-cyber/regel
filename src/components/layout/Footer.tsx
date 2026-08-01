@@ -45,9 +45,11 @@ export function Footer() {
         <div>
           <h4 className="font-display text-xl text-cream">Explore</h4>
           <ul className="mt-6 space-y-3 text-cream/75">
-            <li><Link to="/services" className="hover:text-cream transition-colors">Services</Link></li>
+            <li><Link to="/wedding-planning" className="hover:text-cream transition-colors">Wedding Planning</Link></li>
+            <li><Link to="/event-management" className="hover:text-cream transition-colors">Private Events</Link></li>
+            <li><Link to="/corporate-events" className="hover:text-cream transition-colors">Corporate Events</Link></li>
             <li><Link to="/portfolio" className="hover:text-cream transition-colors">Portfolio</Link></li>
-            <li><Link to="/booking" className="hover:text-cream transition-colors">Plan my event</Link></li>
+            <li><Link to="/booking" className="hover:text-cream transition-colors">Check Availability</Link></li>
             <li><Link to="/contact" className="hover:text-cream transition-colors">Contact</Link></li>
           </ul>
         </div>

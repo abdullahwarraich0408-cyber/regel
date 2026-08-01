@@ -1,14 +1,5 @@
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
 
-/** Fallback event photography when API images are unavailable */
-export const heroFallbackImages = [
-  "https://images.unsplash.com/photo-1519741497659-963689620745?w=640&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1464366400600-664085567c68?w=640&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=640&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=640&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1478147427282-58a87a120781?w=640&q=80&auto=format&fit=crop",
-] as const;
-
 export const heroFanLayout = [
   {
     title: "Wedding styling",
@@ -49,6 +40,11 @@ export function resolveHeroImageUrl(url: string) {
   return `${API_URL}${url}`;
 }
 
+/**
+ * Build hero fan cards from Instagram + portfolio media only.
+ * Missing slots keep an empty imageUrl so the UI shows the brand gradient
+ * instead of stock photography.
+ */
 export function buildHeroFanImages(
   primaryUrls: string[],
   secondaryUrls: string[],
@@ -58,33 +54,16 @@ export function buildHeroFanImages(
     .filter(Boolean);
 
   const unique = [...new Set(collected)];
-  const used = new Set<string>();
-
-  const pickFallback = (index: number) => {
-    for (let offset = 0; offset < heroFallbackImages.length; offset += 1) {
-      const candidate = heroFallbackImages[(index + offset) % heroFallbackImages.length];
-      if (!used.has(candidate)) {
-        used.add(candidate);
-        return candidate;
-      }
-    }
-    return heroFallbackImages[index];
-  };
 
   return heroFanLayout.map((layout, index) => {
-    const fallbackUrl = heroFallbackImages[index];
-    // Last fan card: use a reliable fallback (5th Instagram thumbnails often fail or appear blank)
-    let imageUrl =
-      index === 4 ? pickFallback(index) : (unique[index] ?? pickFallback(index));
-
-    if (imageUrl !== fallbackUrl && index !== 4) {
-      used.add(imageUrl);
-    }
+    const imageUrl = unique[index] ?? "";
+    // Prefer another real image as fallback when the primary fails to load
+    const fallbackUrl = unique[(index + 1) % unique.length] ?? unique[0] ?? "";
 
     return {
       ...layout,
       imageUrl,
-      fallbackUrl,
+      fallbackUrl: fallbackUrl !== imageUrl ? fallbackUrl : "",
     };
   });
 }

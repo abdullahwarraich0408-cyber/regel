@@ -6,7 +6,9 @@ import { MobileNav } from "./MobileNav";
 
 const navLinks = [
   { to: "/", label: "Home" },
-  { to: "/services", label: "Services" },
+  { to: "/wedding-planning", label: "Weddings" },
+  { to: "/event-management", label: "Private Events" },
+  { to: "/corporate-events", label: "Corporate" },
   { to: "/portfolio", label: "Portfolio" },
   { to: "/booking", label: "Plan My Event" },
   { to: "/contact", label: "Contact" },
@@ -42,7 +44,7 @@ export function Navbar() {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-5 xl:gap-7 lg:flex" aria-label="Primary">
             {navLinks.map((link) => (
               <Link
                 key={link.to}

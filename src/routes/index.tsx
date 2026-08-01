@@ -3,12 +3,13 @@ import { HeroSection } from "@/components/sections/HeroSection";
 import { InstagramSection } from "@/components/sections/InstagramSection";
 import { PremiumServicesOverview } from "@/components/sections/PremiumServicesOverview";
 import { PortfolioSection } from "@/components/sections/PortfolioSection";
+import { BookingCTA } from "@/components/sections/BookingCTA";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { TrustSection } from "@/components/sections/TrustSection";
 import { FinalConversionCTA } from "@/components/sections/FinalConversionCTA";
-import { siteConfig } from "@/lib/site-config";
+import { absoluteUrl, siteConfig } from "@/lib/site-config";
 
-const title = `${siteConfig.name} — Premium Wedding & Event Styling in Manchester`;
+const title = `${siteConfig.name} — Luxury Wedding & Event Styling in Manchester, UK`;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -17,16 +18,22 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Premium wedding and event coordination in Manchester. Check availability, view real event portfolio, and enquire via WhatsApp.",
+          "Luxury wedding and event coordination in Manchester and the UK. Check availability, see real Instagram events, and enquire via WhatsApp.",
       },
       { property: "og:title", content: title },
       {
         property: "og:description",
         content: siteConfig.description,
       },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: absoluteUrl("/") },
+      ...(siteConfig.ogImage
+        ? [
+            { property: "og:image", content: siteConfig.ogImage },
+            { name: "twitter:image", content: siteConfig.ogImage },
+          ]
+        : []),
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: absoluteUrl("/") }],
   }),
   component: HomePage,
 });
@@ -38,6 +45,7 @@ function HomePage() {
       <InstagramSection />
       <PremiumServicesOverview />
       <PortfolioSection />
+      <BookingCTA />
       <TestimonialsSection />
       <TrustSection />
       <FinalConversionCTA />

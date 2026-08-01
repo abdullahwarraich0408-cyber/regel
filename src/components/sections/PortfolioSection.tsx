@@ -1,10 +1,12 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Instagram } from "lucide-react";
 import { GalleryCard } from "@/components/cards/GalleryCard";
 import { galleryCategories } from "@/data/gallery";
 import { usePortfolioItems } from "@/hooks/usePortfolioItems";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { siteConfig } from "@/lib/site-config";
+import { trackConversion } from "@/lib/analytics";
 
 export function PortfolioSection() {
   const [filter, setFilter] = useState<(typeof galleryCategories)[number]>("All");
@@ -25,11 +27,33 @@ export function PortfolioSection() {
         <div className="container-prose text-center reveal-on-scroll">
           <span className="eyebrow mx-auto">Real Event Stories</span>
           <h2 className="mt-4 font-display text-4xl leading-tight md:text-5xl">
-            Portfolio coming soon
+            Our latest work lives on Instagram
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-sm text-muted-foreground">
-            Event stories will appear here once published from the admin panel.
+            We showcase real weddings and celebrations from @{siteConfig.instagram.username}.
+            Follow for proof — then check availability for your date.
           </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={siteConfig.social.instagram}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-border/70 bg-background px-6 text-sm font-semibold hover:border-dusty-rose"
+            >
+              <Instagram className="h-4 w-4" />
+              Follow on Instagram
+            </a>
+            <Link
+              to="/booking"
+              onClick={() =>
+                trackConversion("availability_click", { location: "portfolio_empty" })
+              }
+              className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-midnight px-6 text-sm font-semibold text-cream"
+            >
+              {siteConfig.cta.primary}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </section>
     );

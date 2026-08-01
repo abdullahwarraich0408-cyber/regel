@@ -1,13 +1,20 @@
+const envPhone = import.meta.env.VITE_PHONE?.trim();
+const envWhatsapp = import.meta.env.VITE_WHATSAPP?.trim();
+const envSiteUrl = import.meta.env.VITE_SITE_URL?.trim();
+const envOgImage = import.meta.env.VITE_OG_IMAGE?.trim();
+
 export const siteConfig = {
   name: "Regal Knot Events",
   tagline: "Elegant event decor for unforgettable celebrations",
   description:
-    "Premium wedding and event coordination across Manchester — bespoke styling, seamless setup, and unforgettable celebrations.",
+    "Premium wedding and event coordination across Manchester and the UK — bespoke styling, seamless setup, and unforgettable celebrations.",
   location: "Manchester, United Kingdom",
   serviceArea: "Greater Manchester & the North West",
   email: "hello@regalknotevents.co.uk",
-  phone: "+44 0000 000000",
-  whatsapp: "+44 0000 000000",
+  phone: envPhone || "+44 0000 000000",
+  whatsapp: envWhatsapp || envPhone || "+44 0000 000000",
+  siteUrl: (envSiteUrl || "https://regel-omega.vercel.app").replace(/\/$/, ""),
+  ogImage: envOgImage || "",
   social: {
     instagram: "https://www.instagram.com/regal.knot.events",
     facebook: "https://facebook.com/regalknotevents",
@@ -24,7 +31,8 @@ export const siteConfig = {
   },
   cta: {
     primary: "Check Availability",
-    secondary: "Book Consultation",
+    secondary: "Book a Consultation",
+    getQuote: "Get Quote",
     whatsapp: "Chat on WhatsApp",
   },
   trustBadges: ["Weddings", "Private Events", "Corporate Events"],
@@ -46,7 +54,8 @@ export const siteConfig = {
       description:
         "Romantic receptions, ceremony styling, and bespoke wedding decor tailored to your love story.",
       icon: "heart",
-      palette: ["oklch(0.95 0.03 85)", "oklch(0.78 0.06 20)"],
+      palette: ["oklch(0.95 0.03 85)", "oklch(0.78 0.06 20)"] as [string, string],
+      match: ["wedding"],
     },
     {
       slug: "event-management",
@@ -54,7 +63,8 @@ export const siteConfig = {
       description:
         "Milestone birthdays, baby showers, and intimate celebrations styled with luxury and personality.",
       icon: "cake",
-      palette: ["oklch(0.32 0.06 300)", "oklch(0.8 0.08 85)"],
+      palette: ["oklch(0.32 0.06 300)", "oklch(0.8 0.08 85)"] as [string, string],
+      match: ["birthday", "baby", "party", "private", "shower"],
     },
     {
       slug: "corporate-events",
@@ -62,7 +72,8 @@ export const siteConfig = {
       description:
         "Brand launches, awards evenings, and corporate gatherings with polished, professional styling.",
       icon: "briefcase",
-      palette: ["oklch(0.20 0.01 260)", "oklch(0.55 0.06 150)"],
+      palette: ["oklch(0.20 0.01 260)", "oklch(0.55 0.06 150)"] as [string, string],
+      match: ["corporate", "brand", "business"],
     },
   ],
   analytics: {
@@ -71,6 +82,12 @@ export const siteConfig = {
 };
 
 export type SiteConfig = typeof siteConfig;
+
+export function absoluteUrl(path = "/") {
+  if (path.startsWith("http")) return path;
+  const normalised = path.startsWith("/") ? path : `/${path}`;
+  return `${siteConfig.siteUrl}${normalised}`;
+}
 
 export function whatsappUrl(message?: string) {
   const phone = siteConfig.whatsapp.replace(/\D/g, "");
